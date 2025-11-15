@@ -24,8 +24,14 @@ const EnterName = ({ navigation }) => {
     useEffect(() => {
         const loadFontsAsync = async () => {
             await Font.loadAsync(customFonts);
-            await Font.loadAsync('antoutline', require('@ant-design/icons-react-native/fonts/antoutline.ttf'));
-            await Font.loadAsync('antfill', require('@ant-design/icons-react-native/fonts/antfill.ttf'));
+            await Font.loadAsync(
+                'antoutline',
+                require('@ant-design/icons-react-native/fonts/antoutline.ttf')
+            );
+            await Font.loadAsync(
+                'antfill',
+                require('@ant-design/icons-react-native/fonts/antfill.ttf')
+            );
             setFontsLoaded(true);
         };
         loadFontsAsync();
@@ -46,63 +52,6 @@ const EnterName = ({ navigation }) => {
             }
         }
     };
-
-// //connect socket
-//     useEffect(()=>{
-//         const newSocket= io("https://se346-skillexchangebe.onrender.com")
-//         setSocket(newSocket)
-//         console.log("id: "+newSocket.id)
-//         return ()=>{
-//             newSocket.disconnect()
-//         }
-//     },[user])
-//     useEffect(() => {
-//         if (socket === null || user === null) return;
-    
-//         socket.emit("addOnlineUser", user?._id);
-//         socket.on("getOnlineUsers", (users) => {
-//           setOnlineUsers(users);
-//           console.log(onlineUsers)
-//         });
-        
-//         return () => {
-//           socket.off("getOnlineUsers");
-//         };
-//       }, [socket, user]);
-// //------------------------
-
-//     useEffect(() => {
-//         const fetchData = async () => {
-//             try {
-//                 const refreshToken = await AsyncStorage.getItem('refreshToken');
-//                 console.log('refreshToken: ', refreshToken);
-//                 setIsLoading(true);
-//                 if (refreshToken !== null) {
-//                     const response = await fetch('https://se346-skillexchangebe.onrender.com/api/v1/token/checktoken', {
-//                         method: 'POST',
-//                         headers: {
-//                             'Content-Type': 'application/json',
-//                         },
-//                         body: JSON.stringify({
-//                             token: refreshToken,
-//                         }),
-//                     });
-//                     const user = await AsyncStorage.getItem('user');
-//                     if (response.ok) {
-//                         await login(JSON.parse(user));
-//                         navigation.navigate('(tabs)');
-//                     } else {
-//                         await logout();
-//                     }
-//                 }
-//             } catch (e) {
-//                 console.log('Failed to fetch the refresh token: ', e.error);
-//             } finally {
-//                 setIsLoading(false);
-//             }
-//         };
-//         fetchData();
-//     }, [navigation]);
 
     if (!fontsLoaded) {
         return null;
@@ -128,7 +77,8 @@ const EnterName = ({ navigation }) => {
                     marginBottom: 15,
                     alignSelf: 'center',
                     fontFamily: 'Coda-Regular',
-                }}>
+                }}
+            >
                 Welcome
             </Text>
             <Text style={styles.text_center}>LEARN a new skill</Text>
@@ -141,7 +91,8 @@ const EnterName = ({ navigation }) => {
                     width: 120,
                     alignSelf: 'center',
                     margin: 15,
-                }}></View>
+                }}
+            ></View>
             <Text
                 style={{
                     fontSize: 17,
@@ -149,7 +100,8 @@ const EnterName = ({ navigation }) => {
                     marginBottom: 15,
                     alignSelf: 'center',
                     fontFamily: 'Coda-Regular',
-                }}>
+                }}
+            >
                 Register
             </Text>
             <InputText
@@ -160,20 +112,29 @@ const EnterName = ({ navigation }) => {
                 iconName="user"
                 onChangeText={(text) => setName(text)}
             />
-            <CustomButton
-                text="Next"
-                onPress={() => {
-                    if (checkValidName(name)) navigation.navigate('UploadPhoto', params);
+            <View
+                style={{
+                    marginHorizontal: 25,
+                    marginTop: 10,
                 }}
-            />
+            >
+                <CustomButton
+                    text="Next"
+                    margin={false}
+                    onPress={() => {
+                        if (checkValidName(name)) navigation.navigate('UploadPhoto', params);
+                    }}
+                />
+            </View>
             <View
                 style={{
                     flex: 1,
                     flexDirection: 'row',
                     marginTop: 20,
-                    justifyContent: 'space-around',
+                    justifyContent: 'space-between',
                     paddingHorizontal: 25,
-                }}>
+                }}
+            >
                 <Text style={{ fontFamily: 'Coda-Regular', fontSize: 14, marginTop: 5 }}>
                     Already have an account?
                 </Text>
@@ -189,8 +150,11 @@ const EnterName = ({ navigation }) => {
                             borderColor: COLORS.orange,
                             borderWidth: 0.5,
                         },
-                    ]}>
-                    <Text style={[styles.buttonText, { color: COLORS.orange }]} id='loginButton'>Login</Text>
+                    ]}
+                >
+                    <Text style={[styles.buttonText, { color: COLORS.orange }]} id="loginButton">
+                        Login
+                    </Text>
                 </TouchableOpacity>
             </View>
         </GradienLayout>

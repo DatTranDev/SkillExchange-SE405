@@ -1,28 +1,26 @@
-import { useEffect, useState } from "react";
-import Information from "../../components/home/Information";
-import { useLocalSearchParams } from "expo-router";
-import GetData from "../../utils/getdata";
-import { router } from "expo-router";
+import { useEffect, useState } from 'react';
+import Information from '../../components/home/Information';
+import { useLocalSearchParams } from 'expo-router';
+import GetData from '../../utils/getdata';
+import { router } from 'expo-router';
 
 const User = () => {
-	const baseUrl = "https://se346-skillexchangebe.onrender.com";
+    const baseUrl = 'https://se346-skillexchangebe.onrender.com';
 
-	const { id } = useLocalSearchParams();
-	console.log(id);
+    const { id } = useLocalSearchParams();
 
-	const [user, setUser] = useState(null);
+    const [user, setUser] = useState(null);
 
-	useEffect(() => {
-		console.log("hello")
-		const getUserById = async () => {
-			const url = `${baseUrl}/api/v1/user/findbyid/${id}`;
-			const data = await GetData(url);
-			setUser(data);
-		};
+    useEffect(() => {
+        const getUserById = async () => {
+            const url = `${baseUrl}/api/v1/user/findbyid/${id}`;
+            const data = await GetData(url);
+            setUser(data);
+        };
 
-		getUserById();
-	}, []);
+        getUserById();
+    }, []);
 
-	return <Information {...user} />;
+    return <Information {...user} />;
 };
 export default User;

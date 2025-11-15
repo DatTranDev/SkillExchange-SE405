@@ -1,161 +1,166 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 
 import * as Font from 'expo-font';
 
 // Định nghĩa các font chữ
 export const loadFonts = async () => {
-  await Font.loadAsync({
-    'Inter-SemiBold': require('../../assets/fonts/Inter-SemiBold.ttf'),
-    'Inter-Regular': require('../../assets/fonts/Inter-Regular.ttf')
-  });
+    await Font.loadAsync({
+        'Inter-SemiBold': require('../../assets/fonts/Inter-SemiBold.ttf'),
+        'Inter-Regular': require('../../assets/fonts/Inter-Regular.ttf'),
+    });
 };
 
-export const styles= StyleSheet.create({
-    Container:{
+export const styles = StyleSheet.create({
+    Container: {
         justifyContent: 'center',
-        alignItems:'center',
-
+        alignItems: 'center',
+        paddingBottom: 20,
+        backgroundColor: '#FFFFFF',
     },
-    Header:{
-        marginTop:"10%",
-        textAlign:'center',
-        fontFamily:'Inter-SemiBold',
+    Header: {
+        marginTop: '10%',
+        textAlign: 'center',
+        fontFamily: 'Inter-SemiBold',
         fontSize: 22,
-       
     },
-    Search:{
-        height:25,
-        aspectRatio:4.8/1,
-        justifyContent:'space-between',
-        marginTop:10,
-        marginBottom:12,
-        flexDirection:'row',       
+    Search: {
+        height: 44,
+        backgroundColor: '#F5F5F5',
+        borderRadius: 24,
+        paddingHorizontal: 4,
+        marginTop: 20,
+        marginBottom: 16,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '70%',
     },
-    Choose:
-    {
-        borderBottomWidth:1,
-        borderBottomColor:'#FFBE98',
-        color:'#FFBE98',
+    Choose: {
+        backgroundColor: '#FFBE98',
+        color: '#FFFFFF',
+        borderRadius: 18,
     },
-    Option:
-    {
-        fontSize:13,
-        fontFamily:'Inter-SemiBold',
-        
-        padding:2,
-        
-       
+    Option: {
+        fontSize: 14,
+        fontFamily: 'Inter-SemiBold',
+        paddingVertical: 10,
+        paddingHorizontal: 32,
+        color: '#8E8E93',
+        letterSpacing: 0.1,
+        flex: 1,
+        textAlign: 'center',
     },
-    RequestContainer:
-    {
-
-        paddingHorizontal:'3%',
-        paddingVertical:'2.5%',
-        height:'auto',
-        flexDirection:'row',
-        width:'94%',
-        backgroundColor:'rgba(255, 190, 152, 0.11)',
-        marginTop:3,
-        borderRadius:14,
-        marginLeft:'2.5%'
-
-    
-        
-        
+    RequestContainer: {
+        paddingHorizontal: 16,
+        paddingVertical: 14,
+        height: 'auto',
+        flexDirection: 'row',
+        width: '90%',
+        backgroundColor: '#FFFFFF',
+        marginTop: 10,
+        borderRadius: 16,
+        marginLeft: '5%',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.08,
+        shadowRadius: 8,
+        elevation: 3,
+        borderWidth: 1,
+        borderColor: '#F0F0F0',
     },
-    AvatarContainer:
-    {
-        borderRadius: 20,
-        width:35,
-        height:35,
+    AvatarContainer: {
+        borderRadius: 26,
+        width: 52,
+        height: 52,
         overflow: 'hidden',
-        marginTop:5
-
+        backgroundColor: '#FFF5F0',
+        borderWidth: 2,
+        borderColor: '#FFE5D9',
     },
-    Avatar:{
-        width:'100%',
-        height: '100%', 
-        resizeMode:'cover'
+    Avatar: {
+        width: '100%',
+        height: '100%',
+        resizeMode: 'cover',
     },
 
-    ButtonContainer:
-    {
-        width:110,
-        height:32,
-        borderWidth:1,
+    ButtonContainer: {
+        width: 130,
+        height: 38,
+        borderWidth: 1.5,
         justifyContent: 'center',
-        alignItems:'center',
-        borderColor:'#E6E6E6',
-        borderRadius:7,
-        marginTop:7
-
+        alignItems: 'center',
+        borderColor: '#FFBE98',
+        borderRadius: 10,
+        marginTop: 10,
+        backgroundColor: '#FFF9F5',
     },
-    ButtonContainer2:
-    {
-        width:90,
-        height:32,
-        borderWidth:1,
+    ButtonContainer2: {
+        flex: 1,
+        height: 38,
+        borderWidth: 1.5,
         justifyContent: 'center',
-        alignItems:'center',
-        borderColor:'#E6E6E6',
-        borderRadius:7,
-        marginTop:7
-
+        alignItems: 'center',
+        borderRadius: 10,
+        backgroundColor: '#FAFAFA',
     },
-    Button:{
-        fontSize:15.9,
-        fontFamily:'Inter-SemiBold',
-        color:'#FFBE98'
+    Button: {
+        fontSize: 15,
+        fontFamily: 'Inter-SemiBold',
+        color: '#FFBE98',
+        letterSpacing: 0.2,
     },
-    ContentContainer:
-    {
-        marginLeft:12,
-        width:'auto'
+    ContentContainer: {
+        marginLeft: 14,
+        flex: 1,
+        justifyContent: 'center',
     },
-    Time:{
-        fontFamily:'Inter-Regular',
-        fontSize:12,
-        color:'#999999',
+    Time: {
+        fontFamily: 'Inter-Regular',
+        fontSize: 12,
+        color: '#B0B0B0',
+        marginBottom: 4,
     },
     textContainer: {
-        flexDirection: 'row', // Đặt hướng của các phần tử con là hàng ngang
-        alignItems: 'center', // Căn giữa theo chiều dọc
-        maxWidth:'100%',
-      },
-    Name:
-    {
-        fontFamily:'Inter-SemiBold',
-        fontSize:15,
-        maxWidth:100
+        flexDirection: 'row',
+        alignItems: 'center',
+        maxWidth: '100%',
+        marginBottom: 2,
     },
-    Content:{
-        fontFamily:'Inter-Regular',
-        fontSize:14.5,
-        color:'#666666',
+    Name: {
+        fontFamily: 'Inter-SemiBold',
+        fontSize: 16,
+        maxWidth: 140,
+        color: '#1A1A1A',
     },
-    System:{
-        marginTop:2,
-        fontFamily:'Inter-SemiBold',
-        fontSize:14
+    Content: {
+        fontFamily: 'Inter-Regular',
+        fontSize: 15,
+        color: '#666666',
+        lineHeight: 20,
     },
-    Scroll:{
-        // width:'100%',
-        // height:620,
-        flex:1,
-        
+    System: {
+        marginTop: 4,
+        fontFamily: 'Inter-SemiBold',
+        fontSize: 15,
+        color: '#333333',
+        lineHeight: 21,
     },
-    
-    navbar:{
-        height:90
+    Scroll: {
+        flex: 1,
+        backgroundColor: '#FAFAFA',
+        paddingTop: 4,
     },
-    Horizon:{
-        height:'100%'
-    },
-    Response:{
-        flexDirection:'row',       
-    }
 
-
-
-
-})
+    navbar: {
+        height: 90,
+    },
+    Horizon: {
+        height: '100%',
+        backgroundColor: '#FAFAFA',
+    },
+    Response: {
+        flexDirection: 'row',
+        marginTop: 12,
+        gap: 10,
+    },
+});
