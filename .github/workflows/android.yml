@@ -1,68 +1,68 @@
 name: Android CI
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    push:
+        branches: ['main']
+    pull_request:
+        branches: ['main']
 
 jobs:
-  build-android:
-    runs-on: ubuntu-latest
+    build-android:
+        runs-on: ubuntu-latest
 
-    steps:
-      # Checkout code
-      - name: Checkout repository
-        uses: actions/checkout@v4
+        steps:
+            # Checkout code
+            - name: Checkout repository
+              uses: actions/checkout@v4
 
-      # Setup Node
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: yarn
-      
-      # Install dependencies
-      - name: Install dependencies
-        run: yarn install
+            # Setup Node
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 18
+                  cache: npm
 
-      # Setup Java
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17
-          cache: gradle
+            # Install dependencies
+            - name: Install dependencies
+              run: npm ci
 
-      # Setup Android SDK
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+            # Setup Java
+            - name: Set up JDK 17
+              uses: actions/setup-java@v4
+              with:
+                  distribution: temurin
+                  java-version: 17
+                  cache: gradle
 
-      # Make Gradlew executable
-      - name: Grant execute permission for gradlew
-        run: chmod +x android/gradlew
-      - name: Decode Keystore
-        run: echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/release-SE405.keystore
+            # Setup Android SDK
+            - name: Setup Android SDK
+              uses: android-actions/setup-android@v3
 
-      # Build Release APK
-      - name: Build Release APK
-        working-directory: android
-        run: ./gradlew assembleRelease
+            # Make Gradlew executable
+            - name: Grant execute permission for gradlew
+              run: chmod +x android/gradlew
+            - name: Decode Keystore
+              run: echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/release-SE405.keystore
 
-      # (Optional) Build AAB
-      # - name: Build Release AAB
-      #   working-directory: android
-      #   run: ./gradlew bundleRelease
+            # Build Release APK
+            - name: Build Release APK
+              working-directory: android
+              run: ./gradlew assembleRelease
 
-      # Upload artifacts (APK/AAB)
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-release-apk
-          path: android/app/build/outputs/apk/release/*.apk
+            # (Optional) Build AAB
+            # - name: Build Release AAB
+            #   working-directory: android
+            #   run: ./gradlew bundleRelease
 
-      # - name: Upload AAB
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: app-release-aab
-      #     path: android/app/build/outputs/bundle/release/*.aab
+            # Upload artifacts (APK/AAB)
+            - name: Upload APK
+              uses: actions/upload-artifact@v4
+              with:
+                  name: app-release-apk
+                  path: android/app/build/outputs/apk/release/*.apk
+
+            # - name: Upload AAB
+            #   uses: actions/upload-artifact@v4
+            #   with:
+            #     name: app-release-aab
+            #     path: android/app/build/outputs/bundle/release/*.aab
