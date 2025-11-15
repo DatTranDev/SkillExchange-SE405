@@ -41,6 +41,8 @@ jobs:
       # Make Gradlew executable
       - name: Grant execute permission for gradlew
         run: chmod +x android/gradlew
+      - name: Decode Keystore
+        run: echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/release.keystore
 
       # Build Release APK
       - name: Build Release APK
