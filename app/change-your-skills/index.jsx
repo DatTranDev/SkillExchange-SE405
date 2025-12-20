@@ -14,7 +14,7 @@ import { useSession } from '../../context/AuthContext';
 import PatchData from '../../utils/patchdata';
 
 export const handleChangeYourSkills = async (user, updatedTopics) => {
-    const baseUrl = 'https://se346-skillexchangebe.onrender.com';
+    const baseUrl = 'https://se405-skillexchangebe.onrender.com';
     if (updatedTopics.length === 0) {
         alert('Please choose at least one topic');
         return false;
@@ -36,7 +36,7 @@ export const handleChangeYourSkills = async (user, updatedTopics) => {
 };
 
 const ChangeNewSkills = () => {
-    const baseUrl = 'https://se346-skillexchangebe.onrender.com';
+    const baseUrl = 'https://se405-skillexchangebe.onrender.com';
     const { user, login } = useSession();
 
     const [isLoading, setIsLoading] = useState(false);

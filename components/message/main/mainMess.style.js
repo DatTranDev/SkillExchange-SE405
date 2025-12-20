@@ -25,23 +25,23 @@ export const styles= StyleSheet.create({
     },
     Search:{
         backgroundColor:'#E7E7E7',
-        height:30,
-        aspectRatio:11.5/1,
+        height:40,
+        width:'90%',
         borderRadius:36,
         marginTop:30,
         marginBottom:15,
-        flexDirection:'row'
+        flexDirection:'row',
+        alignItems:'center',
         
     },
     IconSearch:{
         marginLeft:10,
-        marginTop:5,
         height:20,
         width:20
     },
     Input:{
         height:'100%',
-        width:'85%',
+        width:'90%',
         paddingHorizontal:10
     },
     CardContainer:

@@ -4,7 +4,7 @@ import GetData from '../../utils/getdata';
 import InformationRequest from '../../components/notification/informationRequest';
 
 const Redirect = () => {
-    const baseUrl = 'https://se346-skillexchangebe.onrender.com';
+    const baseUrl = 'https://se405-skillexchangebe.onrender.com';
 
     const { id } = useLocalSearchParams();
     const { idRequest } = useLocalSearchParams();

@@ -21,7 +21,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import PatchData from '../../utils/patchdata';
 
 export const handleChangeSkillDescription = async (user, skill) => {
-    const baseUrl = 'https://se346-skillexchangebe.onrender.com';
+    const baseUrl = 'https://se405-skillexchangebe.onrender.com';
     const data = await PatchData(`${baseUrl}/api/v1/user/update/${user.id}`, {
         skill: [skill],
     });

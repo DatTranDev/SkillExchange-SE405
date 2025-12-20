@@ -55,7 +55,7 @@ const InformationRequest = ({
         };
 
         if (dataPost) {
-            const url = 'https://se346-skillexchangebe.onrender.com/api/v1/chat/create';
+            const url = 'https://se405-skillexchangebe.onrender.com/api/v1/chat/create';
             const response = await PostData(url, dataPost);
             if (response != 404 && response !== 'Something went wrong' && response) {
                 const chatData = response.data;
@@ -79,7 +79,7 @@ const InformationRequest = ({
         try {
             const token = await AsyncStorage.getItem('accessToken');
             const response = await fetch(
-                `https://se346-skillexchangebe.onrender.com/api/v1/request/delete/${idRequest}`,
+                `https://se405-skillexchangebe.onrender.com/api/v1/request/delete/${idRequest}`,
                 {
                     method: 'DELETE',
                     headers: {
@@ -94,7 +94,7 @@ const InformationRequest = ({
                 if (response.status == 401) {
                     const access = await loadToken();
                     const response2 = await fetch(
-                        `https://se346-skillexchangebe.onrender.com/api/v1/request/delete/${idRequest}`,
+                        `https://se405-skillexchangebe.onrender.com/api/v1/request/delete/${idRequest}`,
                         {
                             method: 'DELETE',
                             headers: {

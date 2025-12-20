@@ -23,7 +23,7 @@ const ChangeCertifications = () => {
 
     const handleChangeCertifications = async () => {
         setIsUpdating(true);
-        const baseUrl = 'https://se346-skillexchangebe.onrender.com';
+        const baseUrl = 'https://se405-skillexchangebe.onrender.com';
         if (uploadedImages.length !== 0) {
             const uploadImagesResponse = await UploadImages(
                 `${baseUrl}/api/v1/upload/files`,

@@ -5,7 +5,7 @@ import GetData from '../../utils/getdata';
 import { router } from 'expo-router';
 
 const User = () => {
-    const baseUrl = 'https://se346-skillexchangebe.onrender.com';
+    const baseUrl = 'https://se405-skillexchangebe.onrender.com';
 
     const { id } = useLocalSearchParams();
 

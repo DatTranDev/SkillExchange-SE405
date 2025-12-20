@@ -16,7 +16,7 @@ const SplashScreen = ({ navigation }) => {
 
     //connect socket
     useEffect(() => {
-        const newSocket = io('https://se346-skillexchangebe.onrender.com');
+        const newSocket = io('https://se405-skillexchangebe.onrender.com');
         setSocket(newSocket);
         return () => {
             newSocket.disconnect();
@@ -48,7 +48,7 @@ const SplashScreen = ({ navigation }) => {
                 setIsLoading(true);
                 if (refreshToken !== null) {
                     const response = await fetch(
-                        'https://se346-skillexchangebe.onrender.com/api/v1/token/checktoken',
+                        'https://se405-skillexchangebe.onrender.com/api/v1/token/checktoken',
                         {
                             method: 'POST',
                             headers: {

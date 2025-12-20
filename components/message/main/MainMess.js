@@ -1,4 +1,4 @@
-import { View, Text, Image, ImageBackground, TextInput, ScrollView, TouchableOpacity, FlatList, Linking, ActivityIndicator, Alert , KeyboardAvoidingView} from "react-native";
+import { View, Text, Image, ImageBackground, TextInput, ScrollView, TouchableOpacity, FlatList, Linking, ActivityIndicator, Alert, KeyboardAvoidingView } from "react-native";
 import React, { useState, useEffect, useRef } from 'react';
 import { loadFonts, styles } from "./mainMess.style";
 import { icons } from "@constants";
@@ -15,7 +15,7 @@ import GetData from "../../../utils/getdata";
 
 const ScreenMess = () => {
 	const [isFontLoaded, setFontLoaded] = useState(false);
-	const  [chatRooms, setChatRooms] = useState([]);
+	const [chatRooms, setChatRooms] = useState([]);
 	const [chatAppear, setChatAppear] = useState([]);
 	const [isLoading, setLoading] = useState(true);
 	const [accessToken, setAccessToken] = useState('');
@@ -36,7 +36,7 @@ const ScreenMess = () => {
 		})
 
 		socket.on("getLatestMessage", (res) => {
-			
+
 			const msg = latestMessage.findIndex((message) => message.chatID === res.chatID)
 			if (msg !== -1) {
 				const newLatestMessage = [...latestMessage]
@@ -45,9 +45,9 @@ const ScreenMess = () => {
 			} else {
 				setLatestMessage((prev) => [...prev, res])
 			}
-			const list=[...chatRooms]
+			const list = [...chatRooms]
 			const listAppear = [...chatAppear]
-			const update=moveItemToTop(list,res.chatID);
+			const update = moveItemToTop(list, res.chatID);
 			const updateAppear = moveItemToTop(listAppear, res.chatID)
 			setChatRooms(update)
 			setChatAppear(updateAppear)
@@ -59,15 +59,15 @@ const ScreenMess = () => {
 		}
 	}, [isFocused, latestMessage, socket, chatRooms, chatAppear])
 
-	useEffect(()=>{   
-		socket.on("deleteChatRoom",(res)=>{
+	useEffect(() => {
+		socket.on("deleteChatRoom", (res) => {
 			const chatId = res.chatId
-			const chatIndex = chatRooms.findIndex((e)=> e.chatInfo._id === chatId)
-			if(chatIndex != -1){
+			const chatIndex = chatRooms.findIndex((e) => e.chatInfo._id === chatId)
+			if (chatIndex != -1) {
 				const newChatRooms = [
-					...chatRooms.slice(0, chatIndex), 
+					...chatRooms.slice(0, chatIndex),
 					...chatRooms.slice(chatIndex + 1)
-				  ];
+				];
 				setChatRooms([...newChatRooms])
 				setChatAppear([...newChatRooms])
 			}
@@ -77,10 +77,10 @@ const ScreenMess = () => {
 		}
 	}, [chatRooms, socket, chatAppear])
 
-	useEffect(()=>{
-		socket.on("getnewchatroom",(chatData)=>{
-			setChatAppear([chatData,...chatAppear])
-			setChatRooms([chatData,...chatRooms])
+	useEffect(() => {
+		socket.on("getnewchatroom", (chatData) => {
+			setChatAppear([chatData, ...chatAppear])
+			setChatRooms([chatData, ...chatRooms])
 		})
 		return () => {
 			socket.off("getnewchatroom");
@@ -89,20 +89,20 @@ const ScreenMess = () => {
 	const moveItemToTop = (items, targetId) => {
 		// Tìm vị trí của item có item.chatInfo._id trùng với targetId
 		const index = items.findIndex(item => item.chatInfo._id === targetId);
-	  
+
 		if (index === -1) {
-		  // Nếu không tìm thấy, trả về danh sách gốc
-		  return items;
+			// Nếu không tìm thấy, trả về danh sách gốc
+			return items;
 		}
-	  
+
 		// Lấy item ra khỏi danh sách
 		const [item] = items.splice(index, 1);
-	  
+
 		// Thêm item vào đầu danh sách
 		return [item, ...items];
-	  };
-	
-	
+	};
+
+
 	const loadToken = async () => {
 		const token = await AsyncStorage.getItem('refreshToken');
 		if (token) {
@@ -121,15 +121,15 @@ const ScreenMess = () => {
 	}
 
 	const loadChat = async () => {
-		const url = `https://se346-skillexchangebe.onrender.com/api/v1/chat/find/${user.id}`
+		const url = `https://se405-skillexchangebe.onrender.com/api/v1/chat/find/${user.id}`
 		const data = await GetData(url);
 		if (data !== "Something went wrong") {
 			if (Array.isArray(data)) {
-				const dataSort= data.sort((a, b) => {
+				const dataSort = data.sort((a, b) => {
 					const dateA = a.latestMessage[0] ? new Date(a.latestMessage[0].createdAt) : new Date(0);
 					const dateB = b.latestMessage[0] ? new Date(b.latestMessage[0].createdAt) : new Date(0);
 					return dateB - dateA;
-				  });
+				});
 				setChatRooms(dataSort);
 				setChatAppear(dataSort);
 			}
@@ -150,7 +150,7 @@ const ScreenMess = () => {
 
 			}
 			else {
-				prevSearchText.current='';
+				prevSearchText.current = '';
 				setChatAppear(chatRooms);
 			}
 		}
@@ -194,12 +194,11 @@ const ScreenMess = () => {
 			}
 
 		}
-		if(message && !newMessage)
-			{
-				if (item.chatInfo._id === message.chatID) {
-					newMessage = message
-				}
+		if (message && !newMessage) {
+			if (item.chatInfo._id === message.chatID) {
+				newMessage = message
 			}
+		}
 		if (newMessage) {
 			if (newMessage.senderID._id == user.id) {
 				format = 'You: '
@@ -208,21 +207,19 @@ const ScreenMess = () => {
 				latest = format + newMessage.content
 			}
 			else {
-				if(newMessage.type == 'image')
-					{
-						latest = format + "sent an "+ newMessage.type;
-					}
-					else
-					{
-						latest = format + "sent a "+ newMessage.type;
-					}
-				
+				if (newMessage.type == 'image') {
+					latest = format + "sent an " + newMessage.type;
+				}
+				else {
+					latest = format + "sent a " + newMessage.type;
+				}
+
 			}
-			
+
 
 		}
 		return (
-			<TouchableOpacity onPress={() => navigation.navigate('chatRoom/room', { chatId: item.chatInfo._id, chat: item.chatInfo, name: item.chatInfo.members[num].username, idFriend: item.chatInfo.members[num].id})}>
+			<TouchableOpacity onPress={() => navigation.navigate('chatRoom/room', { chatId: item.chatInfo._id, chat: item.chatInfo, name: item.chatInfo.members[num].username, idFriend: item.chatInfo.members[num].id })}>
 				<CardMessage Name={item.chatInfo.members[num].username}
 					Avatar={item.chatInfo.members[num].avatar}
 					Status={
@@ -256,18 +253,18 @@ const ScreenMess = () => {
 			<View style={styles.Scroll} >
 
 				{isLoading ? (
-					<ActivityIndicator size="large" color="#FF9557" animating={true} style={{flex:1}}/>
+					<ActivityIndicator size="large" color="#FF9557" animating={true} style={{ flex: 1 }} />
 				) :
 					(
 						(chatAppear.length === 0 || !chatAppear) ? (
-							<Text style={{marginHorizontal:"auto", color:'#FF9400', fontSize:16, marginTop:"5%"}}>Let's find more new friends !</Text>
-						  ) : (
+							<Text style={{ marginHorizontal: "auto", color: '#FF9400', fontSize: 16, marginTop: "5%" }}>Let's find more new friends !</Text>
+						) : (
 							<FlatList
-							  data={chatAppear}
-							  renderItem={renderItem}
-							  keyExtractor={(item) => item.chatInfo._id}
+								data={chatAppear}
+								renderItem={renderItem}
+								keyExtractor={(item) => item.chatInfo._id}
 							/>
-						  )
+						)
 					)
 				}
 

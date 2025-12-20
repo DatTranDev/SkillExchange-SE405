@@ -163,7 +163,7 @@ class UploadInfo extends React.Component {
             };
             try {
                 const response = await fetch(
-                    'https://se346-skillexchangebe.onrender.com/api/v1/user/register',
+                    'https://se405-skillexchangebe.onrender.com/api/v1/user/register',
                     {
                         method: 'POST',
                         headers: {
@@ -325,7 +325,7 @@ export const uploadImage = async (imageUri, name) => {
     });
     try {
         const response = await fetch(
-            'https://se346-skillexchangebe.onrender.com/api/v1/upload/image',
+            'https://se405-skillexchangebe.onrender.com/api/v1/upload/image',
             {
                 method: 'POST',
                 body: formData,

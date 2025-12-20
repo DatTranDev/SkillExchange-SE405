@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const useData = () => {
     const [data, setData] = useState([]);
-    const bareUrl = 'https://se346-skillexchangebe.onrender.com';
+    const bareUrl = 'https://se405-skillexchangebe.onrender.com';
     const limit = 8;
     useEffect(() => {
         const fetchData = async () => {

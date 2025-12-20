@@ -24,7 +24,7 @@ export const handleChangeInformation = async (user, username, email, phonenumber
         alert('Please fill all the fields');
         return false;
     } else {
-        const baseUrl = 'https://se346-skillexchangebe.onrender.com';
+        const baseUrl = 'https://se405-skillexchangebe.onrender.com';
         const data = await PatchData(`${baseUrl}/api/v1/user/update/${user.id}`, {
             username: username,
             email: email,

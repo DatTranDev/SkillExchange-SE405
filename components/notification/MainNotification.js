@@ -36,7 +36,7 @@ const ScreenNotification = () => {
     };
     const createRequest = async () => {
         const response = await fetch(
-            'https://se346-skillexchangebe.onrender.com/api/v1/request/create',
+            'https://se405-skillexchangebe.onrender.com/api/v1/request/create',
             {
                 method: 'POST',
                 headers: {
@@ -57,7 +57,7 @@ const ScreenNotification = () => {
     };
 
     const getRequest = async () => {
-        const url = `https://se346-skillexchangebe.onrender.com/api/v1/request/find/receiver/${user.id}`;
+        const url = `https://se405-skillexchangebe.onrender.com/api/v1/request/find/receiver/${user.id}`;
         const data = await GetData(url);
         if (data !== 'Something went wrong') {
             setRequest(data);
@@ -94,16 +94,16 @@ const ScreenNotification = () => {
         <View style={styles.Horizon}>
             <View style={styles.Container}>
                 <Text style={styles.Header}>Notification</Text>
-                <View style={styles.Search}>
-                    <TouchableOpacity onPress={handelPress}>
+            </View>
+            <View style={styles.Search}>
+                    <TouchableOpacity style={styles.TabBox} onPress={handelPress}>
                         <Text style={[styles.Option, isRequestTab && styles.Choose]}>Requests</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={handelPress2}>
+                    <TouchableOpacity style={styles.TabBox} onPress={handelPress2}>
                         <Text style={[styles.Option, !isRequestTab && styles.Choose]}>System</Text>
                     </TouchableOpacity>
                 </View>
-            </View>
 
             <View style={styles.Scroll}>
                 {isLoading ? (

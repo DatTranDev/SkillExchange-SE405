@@ -178,8 +178,8 @@ const ContentScreen = () => {
             .getMinutes()
             .toString()
             .padStart(2, '0')} ${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1)
-            .toString()
-            .padStart(2, '0')}/${date.getFullYear()}`;
+                .toString()
+                .padStart(2, '0')}/${date.getFullYear()}`;
         return formattedDate;
     };
     const checkTimeDifference = (dateTime1, dateTime2) => {
@@ -317,7 +317,7 @@ const ContentScreen = () => {
     };
 
     const loadMessage = async () => {
-        const url = `https://se346-skillexchangebe.onrender.com/api/v1/message/find/${chatId}`;
+        const url = `https://se405-skillexchangebe.onrender.com/api/v1/message/find/${chatId}`;
         const data = await GetData(url);
         if (data !== 'Something went wrong') {
             setMessageList(data);
@@ -358,7 +358,7 @@ const ContentScreen = () => {
             senderID: user,
         };
         setMessageList([...messageList, msg]);
-        const url = 'https://se346-skillexchangebe.onrender.com/api/v1/message/send';
+        const url = 'https://se405-skillexchangebe.onrender.com/api/v1/message/send';
         const response = await PostData(url, dataPost);
         if (response != 404 && response !== 'Something went wrong' && response) {
             if (socket === null) return;
@@ -385,7 +385,7 @@ const ContentScreen = () => {
         });
         try {
             const response = await fetch(
-                'https://se346-skillexchangebe.onrender.com/api/v1/upload/file',
+                'https://se405-skillexchangebe.onrender.com/api/v1/upload/file',
                 {
                     method: 'POST',
                     body: formData,
@@ -402,7 +402,7 @@ const ContentScreen = () => {
                 if (response.status == 401) {
                     access = await loadToken();
                     const response2 = await fetch(
-                        'https://se346-skillexchangebe.onrender.com/api/v1/upload/file',
+                        'https://se405-skillexchangebe.onrender.com/api/v1/upload/file',
                         {
                             method: 'POST',
                             body: formData,
@@ -442,7 +442,7 @@ const ContentScreen = () => {
         });
         try {
             const response = await fetch(
-                'https://se346-skillexchangebe.onrender.com/api/v1/upload/file',
+                'https://se405-skillexchangebe.onrender.com/api/v1/upload/file',
                 {
                     method: 'POST',
                     body: formData,
@@ -460,7 +460,7 @@ const ContentScreen = () => {
                 if (response.status == 401) {
                     access = await loadToken();
                     const response2 = await fetch(
-                        'https://se346-skillexchangebe.onrender.com/api/v1/upload/file',
+                        'https://se405-skillexchangebe.onrender.com/api/v1/upload/file',
                         {
                             method: 'POST',
                             body: formData,

@@ -50,7 +50,7 @@ export const getUsersByTopic = async (baseUrl, user) => {
 };
 
 const Home = () => {
-    const baseUrl = 'https://se346-skillexchangebe.onrender.com';
+    const baseUrl = 'https://se405-skillexchangebe.onrender.com';
 
     const screenWidth = Dimensions.get('window').width;
     const screenHeight = Dimensions.get('window').height;

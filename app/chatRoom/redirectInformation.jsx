@@ -4,7 +4,7 @@ import GetData from '../../utils/getdata';
 import InformationFriend from '../../components/message/chat_room/informationFriend';
 
 const RedirectInformation = () => {
-    const baseUrl = 'https://se346-skillexchangebe.onrender.com';
+    const baseUrl = 'https://se405-skillexchangebe.onrender.com';
 
     const { id } = useLocalSearchParams();
     const { idChat } = useLocalSearchParams();

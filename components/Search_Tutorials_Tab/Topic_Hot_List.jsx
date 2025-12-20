@@ -4,17 +4,17 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const useData = () => {
-    const [data, setData] = useState([]); 
-    const bareUrl = "https://se346-skillexchangebe.onrender.com";
+    const [data, setData] = useState([]);
+    const bareUrl = "https://se405-skillexchangebe.onrender.com";
     const limit = 8;
-    const page = 4 ;
+    const page = 4;
     useEffect(() => {
-        const fetchData = async ()=> {
+        const fetchData = async () => {
             const response = await axios({
                 method: 'get',
                 maxBodyLength: Infinity,
-                url: `${bareUrl}/api/v1/topic/pagination?page=${page}&limit=${limit}`, 
-                headers: { }
+                url: `${bareUrl}/api/v1/topic/pagination?page=${page}&limit=${limit}`,
+                headers: {}
             })
             setData(response.data.data);
         }

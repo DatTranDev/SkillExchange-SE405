@@ -31,7 +31,7 @@ const EditAvatarProfile = () => {
   };
   const handleChangeAvatar = async () => {
     setIsUpdating(true);
-    const baseUrl = "https://se346-skillexchangebe.onrender.com";
+    const baseUrl = "https://se405-skillexchangebe.onrender.com";
     let avatar = "";
     if (imageUri !== "") {
       const uploadImagesResponse = await UploadImage(

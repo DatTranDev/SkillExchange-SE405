@@ -39,7 +39,7 @@ const InformationFriend = ({
         // navigation.navigate('(tabs)')
     };
     const handleDeleteFriend = async () => {
-        const url = `https://se346-skillexchangebe.onrender.com/api/v1/chat/delete/${chatId}`;
+        const url = `https://se405-skillexchangebe.onrender.com/api/v1/chat/delete/${chatId}`;
         const accessToken = await AsyncStorage.getItem('accessToken');
         try {
             const response = await axios.delete(url, {
@@ -65,7 +65,7 @@ const InformationFriend = ({
             [
                 {
                     text: 'Cancel',
-                    onPress: () => {},
+                    onPress: () => { },
                     style: 'cancel',
                 },
                 {

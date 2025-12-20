@@ -20,7 +20,7 @@ import { router } from 'expo-router';
 
 const Result_Screen = ({ topic, handleBackButton }) => {
     const [user, setUser] = useState([]);
-    const baseUrl = 'https://se346-skillexchangebe.onrender.com';
+    const baseUrl = 'https://se405-skillexchangebe.onrender.com';
     const [isEndUsers, setIsEndUsers] = useState(false);
 
     const shuffleArray = (array) => {

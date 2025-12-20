@@ -15,7 +15,7 @@ export const createChat = async (id1, id2) => {
     };
 
     if (dataPost) {
-        const url = 'https://se346-skillexchangebe.onrender.com/api/v1/chat/create';
+        const url = 'https://se405-skillexchangebe.onrender.com/api/v1/chat/create';
         const response = await PostData(url, dataPost);
         if (response != 404 && response !== 'Something went wrong' && response) {
             const chatData = response.data;
@@ -56,7 +56,7 @@ const Request = (props) => {
         try {
             const token = await AsyncStorage.getItem('accessToken');
             const response = await fetch(
-                `https://se346-skillexchangebe.onrender.com/api/v1/request/delete/${props.Id}`,
+                `https://se405-skillexchangebe.onrender.com/api/v1/request/delete/${props.Id}`,
                 {
                     method: 'DELETE',
                     headers: {
@@ -75,7 +75,7 @@ const Request = (props) => {
                 if (response.status == 401) {
                     const access = await loadToken();
                     const response2 = await fetch(
-                        `https://se346-skillexchangebe.onrender.com/api/v1/request/delete/${props.Id}`,
+                        `https://se405-skillexchangebe.onrender.com/api/v1/request/delete/${props.Id}`,
                         {
                             method: 'DELETE',
                             headers: {

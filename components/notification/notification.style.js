@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
     Container: {
         justifyContent: 'center',
         alignItems: 'center',
-        paddingBottom: 20,
+        paddingBottom: 16,
         backgroundColor: '#FFFFFF',
     },
     Header: {
@@ -26,14 +26,17 @@ export const styles = StyleSheet.create({
     Search: {
         height: 44,
         backgroundColor: '#F5F5F5',
-        borderRadius: 24,
-        paddingHorizontal: 4,
-        marginTop: 20,
-        marginBottom: 16,
+        borderRadius: 18,
+        marginTop: 16,
+        marginBottom: 12,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         width: '70%',
+        marginHorizontal:'auto'
+    },
+    TabBox: {
+        width: '50%',
     },
     Choose: {
         backgroundColor: '#FFBE98',
@@ -50,6 +53,7 @@ export const styles = StyleSheet.create({
         flex: 1,
         textAlign: 'center',
     },
+
     RequestContainer: {
         paddingHorizontal: 16,
         paddingVertical: 14,

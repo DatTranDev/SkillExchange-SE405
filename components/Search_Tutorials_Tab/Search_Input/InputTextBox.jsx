@@ -17,7 +17,7 @@ import { router } from 'expo-router';
 import InputText from '../../Search_Tutorials_Tab/Button/InputText';
 
 const InputTextBox = () => {
-    const bareUrl = 'https://se346-skillexchangebe.onrender.com';
+    const bareUrl = 'https://se405-skillexchangebe.onrender.com';
     const [query, setQuery] = useState('');
     const [topicdata, setTopicData] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
@@ -129,34 +129,36 @@ const InputTextBox = () => {
                     onSubmitEditing={getTopic}
                     value={query}
                 />
-                <FlatList
-                    data={filteredData}
-                    keyboardShouldPersistTaps="handled"
-                    keyExtractor={(item) => item._id}
-                    renderItem={({ item, index }) => (
-                        <TouchableHighlight
-                            style={{
-                                paddingVertical: 14,
-                                paddingHorizontal: 20,
-                                zIndex: 4,
-                                width: '100%',
-                                borderBottomWidth: index === filteredData.length - 1 ? 0 : 1,
-                                borderBottomColor: '#F0F0F0',
-                                backgroundColor: '#FFFFFF',
-                            }}
-                            underlayColor={'#F0F5FF'}
-                            onPress={() => {
-                                handleSelectTopic(item);
-                            }}
-                        >
-                            <Text style={styles.TopicText}>{item.name}</Text>
-                        </TouchableHighlight>
-                    )}
-                    style={[
-                        styles.ItemList,
-                        { borderColor: filteredData.length === 0 ? 'transparent' : '#E0E0E0' },
-                    ]}
-                />
+                {filteredData.length > 0 && (
+                    <FlatList
+                        data={filteredData}
+                        keyboardShouldPersistTaps="handled"
+                        keyExtractor={(item) => item._id}
+                        renderItem={({ item, index }) => (
+                            <TouchableHighlight
+                                style={{
+                                    paddingVertical: 14,
+                                    paddingHorizontal: 20,
+                                    zIndex: 4,
+                                    width: '100%',
+                                    borderBottomWidth: index === filteredData.length - 1 ? 0 : 1,
+                                    borderBottomColor: '#F0F0F0',
+                                    backgroundColor: '#FFFFFF',
+                                }}
+                                underlayColor={'#F0F5FF'}
+                                onPress={() => {
+                                    handleSelectTopic(item);
+                                }}
+                            >
+                                <Text style={styles.TopicText}>{item.name}</Text>
+                            </TouchableHighlight>
+                        )}
+                        style={[
+                            styles.ItemList,
+                            { borderColor: filteredData.length === 0 ? 'transparent' : '#E0E0E0' },
+                        ]}
+                    />
+                )}
             </View>
         </SafeAreaView>
     );

@@ -18,7 +18,7 @@ const SwiperList = ({
 	swiperRef, // Reference đến swiper (để lấy các property của thư viện swiper)
 	onSwipedAll, // Hàm xử lý khi người dùng lướt hết tất cả các card
 }) => {
-	const baseUrl = "https://se346-skillexchangebe.onrender.com";
+	const baseUrl = "https://se405-skillexchangebe.onrender.com";
 
 	const { user } = useSession();
 

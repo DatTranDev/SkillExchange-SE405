@@ -26,7 +26,7 @@ const Profile = () => {
     const [showLogoutModal, setShowLogoutModal] = useState(false);
     const navigation = useNavigation();
     const { socket } = useSocketContext();
-    const baseUrl = 'https://se346-skillexchangebe.onrender.com/api/v1';
+    const baseUrl = 'https://se405-skillexchangebe.onrender.com/api/v1';
     useEffect(() => {
         if (user) {
             // User data loaded

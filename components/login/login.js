@@ -28,7 +28,7 @@ const Login = ({ navigation }) => {
     const [isLoading, setIsLoading] = useState(false);
     const { socket, setSocket, onlineUsers, setOnlineUsers } = useSocketContext();
 
-    const baseURL = 'https://se346-skillexchangebe.onrender.com';
+    const baseURL = 'https://se405-skillexchangebe.onrender.com';
 
     useEffect(() => {
         const newSocket = io(`${baseURL}`);
@@ -68,7 +68,7 @@ const Login = ({ navigation }) => {
 
         try {
             const response = await fetch(
-                'https://se346-skillexchangebe.onrender.com/api/v1/user/login',
+                'https://se405-skillexchangebe.onrender.com/api/v1/user/login',
                 {
                     method: 'POST',
                     headers: {
