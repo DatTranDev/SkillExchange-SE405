@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, Image, TouchableOpacity, Modal, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../register/style';
-import { COLORS } from '../../constants';
+import { COLORS, API_CONFIG } from '../../constants';
 import { scale } from 'react-native-size-matters';
 import InputText from '../register/Button/InputText';
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -28,10 +28,8 @@ const Login = ({ navigation }) => {
     const [isLoading, setIsLoading] = useState(false);
     const { socket, setSocket, onlineUsers, setOnlineUsers } = useSocketContext();
 
-    const baseURL = 'https://se346-skillexchangebe.onrender.com';
-
     useEffect(() => {
-        const newSocket = io(`${baseURL}`);
+        const newSocket = io(API_CONFIG.BASE_URL);
         setSocket(newSocket);
 
         return () => {
@@ -67,19 +65,16 @@ const Login = ({ navigation }) => {
         setIsLoading(true);
 
         try {
-            const response = await fetch(
-                'https://se346-skillexchangebe.onrender.com/api/v1/user/login',
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        email: email,
-                        password: password,
-                    }),
-                }
-            );
+            const response = await fetch(`${API_CONFIG.BASE_URL}/api/v1/user/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password,
+                }),
+            });
             if (response.status === 401) {
                 alert('Wrong email or password');
             } else if (response.status === 404) {

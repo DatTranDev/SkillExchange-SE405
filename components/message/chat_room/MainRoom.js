@@ -14,7 +14,7 @@ import {
     Alert,
 } from 'react-native';
 import { registerRootComponent } from 'expo';
-import { icons } from '@constants';
+import { icons, API_CONFIG } from '@constants';
 import { loadFonts, styles } from './mainRoom.style';
 import { Message } from './message';
 import * as ImagePicker from 'expo-image-picker';
@@ -317,7 +317,7 @@ const ContentScreen = () => {
     };
 
     const loadMessage = async () => {
-        const url = `https://se346-skillexchangebe.onrender.com/api/v1/message/find/${chatId}`;
+        const url = `${API_CONFIG.BASE_URL}/api/v1/message/find/${chatId}`;
         const data = await GetData(url);
         if (data !== 'Something went wrong') {
             setMessageList(data);
@@ -358,7 +358,7 @@ const ContentScreen = () => {
             senderID: user,
         };
         setMessageList([...messageList, msg]);
-        const url = 'https://se346-skillexchangebe.onrender.com/api/v1/message/send';
+        const url = `${API_CONFIG.BASE_URL}/api/v1/message/send`;
         const response = await PostData(url, dataPost);
         if (response != 404 && response !== 'Something went wrong' && response) {
             if (socket === null) return;
@@ -384,34 +384,28 @@ const ContentScreen = () => {
             uri: imageUri,
         });
         try {
-            const response = await fetch(
-                'https://se346-skillexchangebe.onrender.com/api/v1/upload/file',
-                {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        Authorization: `Bearer ${access}`,
-                    },
-                }
-            );
+            const response = await fetch(`${API_CONFIG.BASE_URL}/api/v1/upload/file`, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${access}`,
+                },
+            });
             if (response.status == 200) {
                 const json = await response.json();
                 return json.image;
             } else {
                 if (response.status == 401) {
                     access = await loadToken();
-                    const response2 = await fetch(
-                        'https://se346-skillexchangebe.onrender.com/api/v1/upload/file',
-                        {
-                            method: 'POST',
-                            body: formData,
-                            headers: {
-                                'Content-Type': 'multipart/form-data',
-                                Authorization: `Bearer ${access}`,
-                            },
-                        }
-                    );
+                    const response2 = await fetch(`${API_CONFIG.BASE_URL}/api/v1/upload/file`, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            Authorization: `Bearer ${access}`,
+                        },
+                    });
                     if (response2.status == 200) {
                         const json = await response2.json();
                         return json.image;
@@ -441,17 +435,14 @@ const ContentScreen = () => {
             uri: recordUri,
         });
         try {
-            const response = await fetch(
-                'https://se346-skillexchangebe.onrender.com/api/v1/upload/file',
-                {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        Authorization: `Bearer ${access}`,
-                    },
-                }
-            );
+            const response = await fetch(`${API_CONFIG.BASE_URL}/api/v1/upload/file`, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${access}`,
+                },
+            });
 
             if (response.status == 200) {
                 const json = await response.json();
@@ -459,17 +450,14 @@ const ContentScreen = () => {
             } else {
                 if (response.status == 401) {
                     access = await loadToken();
-                    const response2 = await fetch(
-                        'https://se346-skillexchangebe.onrender.com/api/v1/upload/file',
-                        {
-                            method: 'POST',
-                            body: formData,
-                            headers: {
-                                'Content-Type': 'multipart/form-data',
-                                Authorization: `Bearer ${access}`,
-                            },
-                        }
-                    );
+                    const response2 = await fetch(`${API_CONFIG.BASE_URL}/api/v1/upload/file`, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            Authorization: `Bearer ${access}`,
+                        },
+                    });
                     if (response2.status == 200) {
                         const json = await response2.json();
                         return json.image;
@@ -711,7 +699,6 @@ const ContentScreen = () => {
                         {renderMessage()}
                     </ScrollView>
                 )}
-                {/* <Message User="My message" Content={"https://firebasestorage.googleapis.com/v0/b/skillexchange-62da0.appspot.com/o/files%2F661aceb50b954258a9b6dc70?alt=media&token=57eed036-d8da-41e8-b97a-bc752a553243"} Time={""} Avatar={""} Type="record" />      */}
 
                 {/* bottom */}
                 {isFriend ? (

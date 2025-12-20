@@ -1,6 +1,6 @@
 import favicon from '@assets/favicon.svg';
 import { CircleButton } from '@components';
-import { COLORS, icons } from '@constants';
+import { COLORS, icons, API_CONFIG } from '@constants';
 import { Stack } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Dimensions, Keyboard, StyleSheet, Text, View } from 'react-native';
@@ -31,27 +31,25 @@ export const shuffleArray = (array) => {
     return newArray;
 };
 
-export const getTopicUrl = (baseUrl, user) => {
+export const getTopicUrl = (user) => {
     if (!user || !user.learnTopicSkill) {
-        return `${baseUrl}/api/v1/user/find/topic?topics=`;
+        return `${API_CONFIG.BASE_URL}/api/v1/user/find/topic?topics=`;
     }
 
-    let topicUrl = `${baseUrl}/api/v1/user/find/topic?topics=`;
+    let topicUrl = `${API_CONFIG.BASE_URL}/api/v1/user/find/topic?topics=`;
     user.learnTopicSkill.forEach((topic, index) => {
         topicUrl = `${topicUrl}${topic.name},`;
     });
     return topicUrl;
 };
 
-export const getUsersByTopic = async (baseUrl, user) => {
-    const url = getTopicUrl(baseUrl, user);
+export const getUsersByTopic = async (user) => {
+    const url = getTopicUrl(user);
     const data = await GetData(url);
     return data;
 };
 
 const Home = () => {
-    const baseUrl = 'https://se346-skillexchangebe.onrender.com';
-
     const screenWidth = Dimensions.get('window').width;
     const screenHeight = Dimensions.get('window').height;
     const [backButtonSize, setBackButtonSize] = useState((screenWidth / 100) * 18);
@@ -93,9 +91,9 @@ const Home = () => {
 
     const getUsers = async () => {
         setIsLoading(true);
-        const usersByTopic = await getUsersByTopic(baseUrl, user);
+        const usersByTopic = await getUsersByTopic(user);
         if (usersByTopic.length === 0) {
-            const allUsers = await GetData(`${baseUrl}/api/v1/user/find`);
+            const allUsers = await GetData(`${API_CONFIG.BASE_URL}/api/v1/user/find`);
             if (allUsers.length === 0) {
                 setIsEndUsers(true);
                 setIsLoading(false);

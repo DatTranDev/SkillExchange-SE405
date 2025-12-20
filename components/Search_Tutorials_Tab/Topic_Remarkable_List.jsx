@@ -1,32 +1,30 @@
-import { View, FlatList, TouchableOpacity, StyleSheet, Alert } from "react-native";
-import Category from "./Category/Category";
+import { View, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import Category from './Category/Category';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_CONFIG } from '../../constants';
 
 const useData = () => {
-    const [data, setData] = useState([]); 
-    const bareUrl = "https://se346-skillexchangebe.onrender.com";
+    const [data, setData] = useState([]);
     const limit = 8;
-    const page = 2 ;
+    const page = 2;
     useEffect(() => {
-        const fetchData = async ()=> {
+        const fetchData = async () => {
             const response = await axios({
                 method: 'get',
                 maxBodyLength: Infinity,
-                url: `${bareUrl}/api/v1/topic/pagination?page=${page}&limit=${limit}`, 
-                headers: { }
-            })
+                url: `${API_CONFIG.BASE_URL}/api/v1/topic/pagination?page=${page}&limit=${limit}`,
+                headers: {},
+            });
             setData(response.data.data);
-        }
+        };
         fetchData();
     }, []);
 
     return data;
-}
+};
 
-const renderItem = ({ item }) => (
-    <Category imageUri={item.imageUrl} name={item.name} />
-);
+const renderItem = ({ item }) => <Category imageUri={item.imageUrl} name={item.name} />;
 
 const numColumns = 2;
 const Topic_Remarkable_List = () => {
@@ -48,20 +46,20 @@ const Topic_Remarkable_List = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        marginStart:-5,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginStart: -5,
     },
     itemContainer: {
         flex: 1,
         width: 220,
         height: 220,
         margin: 5,
-        backgroundColor: "#fff",
+        backgroundColor: '#fff',
     },
     columnWrapper: {
-        flexWrap: "wrap",
-        justifyContent: "space-between",
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
     },
 });
 

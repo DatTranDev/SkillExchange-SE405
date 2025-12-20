@@ -2,7 +2,7 @@ import GradienLayout from './TemplateLayout/GradientLayout';
 import { Text, Modal, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import styles from './style';
-import { COLORS } from '../../constants';
+import { COLORS, API_CONFIG } from '../../constants';
 import { scale } from 'react-native-size-matters';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import React from 'react';
@@ -162,16 +162,13 @@ class UploadInfo extends React.Component {
                 description: [passing.description],
             };
             try {
-                const response = await fetch(
-                    'https://se346-skillexchangebe.onrender.com/api/v1/user/register',
-                    {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(params),
-                    }
-                );
+                const response = await fetch(`${API_CONFIG.BASE_URL}/api/v1/user/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(params),
+                });
                 if (!response.ok) {
                     const json = await response.json();
                     alert(json.message);
@@ -324,16 +321,13 @@ export const uploadImage = async (imageUri, name) => {
         uri: imageUri,
     });
     try {
-        const response = await fetch(
-            'https://se346-skillexchangebe.onrender.com/api/v1/upload/image',
-            {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            }
-        );
+        const response = await fetch(`${API_CONFIG.BASE_URL}/api/v1/upload/image`, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
         if (response.ok) {
             const json = await response.json();
             return json.image;

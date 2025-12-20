@@ -2,10 +2,10 @@ import { TouchableOpacity, Text, StyleSheet, View, FlatList } from 'react-native
 import React, { useState, useEffect } from 'react';
 import TagsButton from './Topic_Tags/Tags';
 import axios from 'axios';
+import { API_CONFIG } from '../../constants';
 
 const useData = () => {
     const [data, setData] = useState([]);
-    const bareUrl = 'https://se346-skillexchangebe.onrender.com';
     const limit = 6;
     const page = 3;
     useEffect(() => {
@@ -13,7 +13,7 @@ const useData = () => {
             const response = await axios({
                 method: 'get',
                 maxBodyLength: Infinity,
-                url: `${bareUrl}/api/v1/topic/pagination?page=${page}&limit=${limit}`,
+                url: `${API_CONFIG.BASE_URL}/api/v1/topic/pagination?page=${page}&limit=${limit}`,
                 headers: {},
             });
             setData(response.data.data);

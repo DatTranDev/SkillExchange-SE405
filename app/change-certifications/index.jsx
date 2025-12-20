@@ -1,6 +1,6 @@
 import { Text, View, FlatList, TouchableOpacity, Alert } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { COLORS } from '../../constants';
+import { COLORS, API_CONFIG } from '../../constants';
 import { useState, useRef } from 'react';
 import { Stack, router } from 'expo-router';
 import { SafeAreaView } from 'react-native';
@@ -23,10 +23,9 @@ const ChangeCertifications = () => {
 
     const handleChangeCertifications = async () => {
         setIsUpdating(true);
-        const baseUrl = 'https://se346-skillexchangebe.onrender.com';
         if (uploadedImages.length !== 0) {
             const uploadImagesResponse = await UploadImages(
-                `${baseUrl}/api/v1/upload/files`,
+                `${API_CONFIG.BASE_URL}/api/v1/upload/files`,
                 uploadedImages
             );
             if (!uploadImagesResponse || uploadImagesResponse === 'Something went wrong') {
@@ -45,7 +44,7 @@ const ChangeCertifications = () => {
             }
         });
 
-        const data = await PatchData(`${baseUrl}/api/v1/user/update/${user.id}`, {
+        const data = await PatchData(`${API_CONFIG.BASE_URL}/api/v1/user/update/${user.id}`, {
             imageCerti: updatedCertificationImages.current,
         });
         if (!data || data === '404' || data === 'Something went wrong') {
