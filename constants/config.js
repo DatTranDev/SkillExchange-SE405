@@ -1,6 +1,6 @@
 // API Configuration
 export const API_CONFIG = {
-    BASE_URL: 'https://se346-skillexchangebe.onrender.com',
+    BASE_URL: 'https://se405-skillexchangebe.onrender.com',
     API_VERSION: '/api/v1',
 };
 
