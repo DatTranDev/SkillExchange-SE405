@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import styles from './style';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { LinearGradient } from 'expo-linear-gradient';
-import { COLORS } from '../../constants';
+import { COLORS, API_CONFIG } from '../../constants';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSession } from '../../context/AuthContext';
@@ -16,7 +16,7 @@ const SplashScreen = ({ navigation }) => {
 
     //connect socket
     useEffect(() => {
-        const newSocket = io('https://se405-skillexchangebe.onrender.com');
+        const newSocket = io(API_CONFIG.BASE_URL);
         setSocket(newSocket);
         return () => {
             newSocket.disconnect();
@@ -47,18 +47,15 @@ const SplashScreen = ({ navigation }) => {
                 }
                 setIsLoading(true);
                 if (refreshToken !== null) {
-                    const response = await fetch(
-                        'https://se405-skillexchangebe.onrender.com/api/v1/token/checktoken',
-                        {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                token: refreshToken,
-                            }),
-                        }
-                    );
+                    const response = await fetch(`${API_CONFIG.BASE_URL}/api/v1/token/checktoken`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            token: refreshToken,
+                        }),
+                    });
                     const user = await AsyncStorage.getItem('user');
                     if (response.ok && user !== null) {
                         await login(JSON.parse(user));

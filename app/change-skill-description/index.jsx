@@ -9,7 +9,7 @@ import {
     Keyboard,
 } from 'react-native';
 import styles from '../../components/register/style';
-import { COLORS } from '../../constants';
+import { COLORS, API_CONFIG } from '../../constants';
 import { scale } from 'react-native-size-matters';
 import { useState } from 'react';
 import { router } from 'expo-router';
@@ -21,8 +21,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import PatchData from '../../utils/patchdata';
 
 export const handleChangeSkillDescription = async (user, skill) => {
-    const baseUrl = 'https://se405-skillexchangebe.onrender.com';
-    const data = await PatchData(`${baseUrl}/api/v1/user/update/${user.id}`, {
+    const data = await PatchData(`${API_CONFIG.BASE_URL}/api/v1/user/update/${user.id}`, {
         skill: [skill],
     });
     if (!data || data === '404' || data === 'Something went wrong') {

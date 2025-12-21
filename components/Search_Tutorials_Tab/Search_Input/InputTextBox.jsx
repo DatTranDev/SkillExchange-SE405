@@ -12,12 +12,11 @@ import {
 } from 'react-native';
 import { scale } from 'react-native-size-matters';
 import axios from 'axios';
-import { COLORS } from '../../../constants';
+import { COLORS, API_CONFIG } from '../../../constants';
 import { router } from 'expo-router';
 import InputText from '../../Search_Tutorials_Tab/Button/InputText';
 
 const InputTextBox = () => {
-    const bareUrl = 'https://se405-skillexchangebe.onrender.com';
     const [query, setQuery] = useState('');
     const [topicdata, setTopicData] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
@@ -80,7 +79,7 @@ const InputTextBox = () => {
             const response = await axios({
                 method: 'get',
                 maxBodyLength: Infinity,
-                url: `${bareUrl}/api/v1/topic/find`,
+                url: `${API_CONFIG.BASE_URL}/api/v1/topic/find`,
                 headers: {},
             });
 

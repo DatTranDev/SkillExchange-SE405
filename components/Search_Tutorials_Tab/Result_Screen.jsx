@@ -3,7 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Stack } from 'expo-router';
 import favicon from '@assets/favicon.svg';
 import { ProfileCard, ScreenHeaderBtn } from '..';
-import { COLORS, icons } from '@constants';
+import { COLORS, icons, API_CONFIG } from '@constants';
 import { CircleButton } from '@components';
 import { Dimensions } from 'react-native';
 import { BackHeader } from '../../components';
@@ -20,7 +20,6 @@ import { router } from 'expo-router';
 
 const Result_Screen = ({ topic, handleBackButton }) => {
     const [user, setUser] = useState([]);
-    const baseUrl = 'https://se405-skillexchangebe.onrender.com';
     const [isEndUsers, setIsEndUsers] = useState(false);
 
     const shuffleArray = (array) => {
@@ -33,7 +32,7 @@ const Result_Screen = ({ topic, handleBackButton }) => {
 
     const getuser = async () => {
         setIsLoading(true);
-        const url = `${baseUrl}/api/v1/user/find/topic?topics=${topic}`;
+        const url = `${API_CONFIG.BASE_URL}/api/v1/user/find/topic?topics=${topic}`;
         const data = await GetData(url);
         if (data.length === 0) {
             setIsEndUsers(true);

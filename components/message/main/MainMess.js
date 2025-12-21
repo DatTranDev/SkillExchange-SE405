@@ -1,17 +1,14 @@
 import { View, Text, Image, ImageBackground, TextInput, ScrollView, TouchableOpacity, FlatList, Linking, ActivityIndicator, Alert, KeyboardAvoidingView } from "react-native";
 import React, { useState, useEffect, useRef } from 'react';
-import { loadFonts, styles } from "./mainMess.style";
-import { icons } from "@constants";
-import CardMessage from "./card_message";
+import { loadFonts, styles } from './mainMess.style';
+import { icons, API_CONFIG } from '@constants';
+import CardMessage from './card_message';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
-import { useSocketContext } from "../../../context/SocketContext";
-import { useSession } from "../../../context/AuthContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import CheckRefreshToken from "../../../utils/checkrefreshtoken";
-import GetData from "../../../utils/getdata";
-
-
-
+import { useSocketContext } from '../../../context/SocketContext';
+import { useSession } from '../../../context/AuthContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import CheckRefreshToken from '../../../utils/checkrefreshtoken';
+import GetData from '../../../utils/getdata';
 
 const ScreenMess = () => {
 	const [isFontLoaded, setFontLoaded] = useState(false);
@@ -237,18 +234,20 @@ const ScreenMess = () => {
 	};
 
 
-	return (
-		<View style={styles.Horizon} >
-			<View style={styles.Container}>
-				<Text style={styles.Header}>Message</Text>
-				<View style={styles.Search}>
-					<Image source={icons.search_icon} style={styles.IconSearch}></Image>
-					<TextInput placeholder="Search"
-						style={styles.Input}
-						value={searchText}
-						onChangeText={handleSearch}></TextInput>
-				</View>
-			</View>
+    return (
+        <View style={styles.Horizon}>
+            <View style={styles.Container}>
+                <Text style={styles.Header}>Message</Text>
+                <View style={styles.Search}>
+                    <Image source={icons.search_icon} style={styles.IconSearch}></Image>
+                    <TextInput
+                        placeholder="Search"
+                        style={styles.Input}
+                        value={searchText}
+                        onChangeText={handleSearch}
+                    ></TextInput>
+                </View>
+            </View>
 
 			<View style={styles.Scroll} >
 
@@ -274,5 +273,5 @@ const ScreenMess = () => {
 	);
 };
 
-export default (ScreenMess);
+export default ScreenMess;
 // registerRootComponent(ScreenMess);

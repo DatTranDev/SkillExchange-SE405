@@ -10,7 +10,7 @@ import {
     StatusBar,
 } from 'react-native';
 import { SafeAreaView } from 'react-native';
-import { COLORS } from '@constants';
+import { COLORS, API_CONFIG } from '@constants';
 import Background from '@assets/icons/Background.png';
 import EditProfile from '@assets/icons/Edit profile.png';
 import { useEffect, useState } from 'react';
@@ -26,7 +26,7 @@ const Profile = () => {
     const [showLogoutModal, setShowLogoutModal] = useState(false);
     const navigation = useNavigation();
     const { socket } = useSocketContext();
-    const baseUrl = 'https://se405-skillexchangebe.onrender.com/api/v1';
+    const baseUrl = `${API_CONFIG.BASE_URL}/api/v1`;
     useEffect(() => {
         if (user) {
             // User data loaded

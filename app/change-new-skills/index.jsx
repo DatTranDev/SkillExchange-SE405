@@ -3,7 +3,7 @@ import { Text, View, FlatList, TouchableOpacity } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import styles from '../../components/register/style';
 
-import { COLORS } from '../../constants';
+import { COLORS, API_CONFIG } from '../../constants';
 import { scale } from 'react-native-size-matters';
 import { useEffect, useState } from 'react';
 import CustomButton from '../../components/register/Button/CustomButton';
@@ -14,7 +14,6 @@ import { useSession } from '../../context/AuthContext';
 import PatchData from '../../utils/patchdata';
 
 export const handleChangeNewSkills = async (user, updatedTopics) => {
-    const baseUrl = 'https://se405-skillexchangebe.onrender.com';
     if (updatedTopics.length === 0) {
         alert('Please choose at least one topic');
         return;
@@ -22,7 +21,10 @@ export const handleChangeNewSkills = async (user, updatedTopics) => {
     const updatedJson = {
         learnTopicSkill: updatedTopics,
     };
-    const data = await PatchData(`${baseUrl}/api/v1/user/update/${user.id}`, updatedJson);
+    const data = await PatchData(
+        `${API_CONFIG.BASE_URL}/api/v1/user/update/${user.id}`,
+        updatedJson
+    );
     if (data === '404') {
         alert('User not found');
     } else if (data === 'Something went wrong') {
@@ -35,7 +37,6 @@ export const handleChangeNewSkills = async (user, updatedTopics) => {
 
 const ChangeYourSkills = () => {
     const { user, login } = useSession();
-    const baseUrl = 'https://se405-skillexchangebe.onrender.com';
     const [isLoading, setIsLoading] = useState(false);
     const [topics, setTopics] = useState([]);
     const [isUpdating, setIsUpdating] = useState(false);
@@ -65,7 +66,7 @@ const ChangeYourSkills = () => {
     const fetchTopics = async () => {
         setIsLoading(true);
         try {
-            const response = await fetch(`${baseUrl}/api/v1/topic/find`);
+            const response = await fetch(`${API_CONFIG.BASE_URL}/api/v1/topic/find`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }

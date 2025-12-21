@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity, FlatList, ActivityIndicator } from 'react
 import { useState, useEffect } from 'react';
 // import NavBar from "./NavBar";
 import { loadFonts, styles } from './notification.style';
+import { API_CONFIG } from '../../constants';
 import Request from './Requests';
 import System from './System';
 import { useSession } from '../../context/AuthContext';
@@ -35,21 +36,18 @@ const ScreenNotification = () => {
         // }
     };
     const createRequest = async () => {
-        const response = await fetch(
-            'https://se405-skillexchangebe.onrender.com/api/v1/request/create',
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization:
-                        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjFjMWM5OTkyOGZhZDhhMGU4ZDAxZTYiLCJ0eXBlIjoicmVmcmVzaCIsImlhdCI6MTcxNTE5NTk4NywiZXhwIjoxNzE3Nzg3OTg3fQ.9tlJNB-8NqfxtxeJ2Y0khcmuucbEUvdo0zSPe49ctg4',
-                },
-                body: JSON.stringify({
-                    senderID: '661c1c99928fad8a0e8d01e6',
-                    receiverID: '661aceb50b954258a9b6dc70 ',
-                }),
-            }
-        );
+        const response = await fetch(`${API_CONFIG.BASE_URL}/api/v1/request/create`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization:
+                    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjFjMWM5OTkyOGZhZDhhMGU4ZDAxZTYiLCJ0eXBlIjoicmVmcmVzaCIsImlhdCI6MTcxNTE5NTk4NywiZXhwIjoxNzE3Nzg3OTg3fQ.9tlJNB-8NqfxtxeJ2Y0khcmuucbEUvdo0zSPe49ctg4',
+            },
+            body: JSON.stringify({
+                senderID: '661c1c99928fad8a0e8d01e6',
+                receiverID: '661aceb50b954258a9b6dc70 ',
+            }),
+        });
     };
     const refeshReques = (idRemove) => {
         const newRes = requests.filter((res) => res._id !== idRemove);
@@ -57,7 +55,7 @@ const ScreenNotification = () => {
     };
 
     const getRequest = async () => {
-        const url = `https://se405-skillexchangebe.onrender.com/api/v1/request/find/receiver/${user.id}`;
+        const url = `${API_CONFIG.BASE_URL}/api/v1/request/find/receiver/${user.id}`;
         const data = await GetData(url);
         if (data !== 'Something went wrong') {
             setRequest(data);

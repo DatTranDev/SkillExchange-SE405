@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import styles from '../../components/register/style';
 import InputText from '../../components/register/Button/InputText';
-import { COLORS } from '../../constants';
+import { COLORS, API_CONFIG } from '../../constants';
 import { scale } from 'react-native-size-matters';
 import { useState } from 'react';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -24,8 +24,7 @@ export const handleChangeInformation = async (user, username, email, phonenumber
         alert('Please fill all the fields');
         return false;
     } else {
-        const baseUrl = 'https://se405-skillexchangebe.onrender.com';
-        const data = await PatchData(`${baseUrl}/api/v1/user/update/${user.id}`, {
+        const data = await PatchData(`${API_CONFIG.BASE_URL}/api/v1/user/update/${user.id}`, {
             username: username,
             email: email,
             phoneNumber: phonenumber,

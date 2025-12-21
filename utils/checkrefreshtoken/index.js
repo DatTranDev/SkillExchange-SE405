@@ -1,22 +1,22 @@
-import axios from "axios";
-import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
+import axios from 'axios';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+import { API_CONFIG } from '../../constants';
 
 const CheckRefreshToken = async (refreshToken) => {
-	const baseUrl = "https://se405-skillexchangebe.onrender.com";
-	try {
-		const response = await axios.get(`${baseUrl}/api/v1/token/refresh-token`, {
-			headers: {
-				Authorization: `Bearer ${refreshToken}`,
-			},
-		});
-		return response.data.access_token;
-	} catch (error) {
-		if (error.response.status !== 401) {
-			return null;
-		} else {
-			return "Session expired";
-		}
-	}
+    try {
+        const response = await axios.get(`${API_CONFIG.BASE_URL}/api/v1/token/refresh-token`, {
+            headers: {
+                Authorization: `Bearer ${refreshToken}`,
+            },
+        });
+        return response.data.access_token;
+    } catch (error) {
+        if (error.response.status !== 401) {
+            return null;
+        } else {
+            return 'Session expired';
+        }
+    }
 };
 
 export default CheckRefreshToken;
