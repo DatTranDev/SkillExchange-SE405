@@ -14,6 +14,8 @@ import GetData from '../../../utils/getdata';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useSocketContext } from '../../../context/SocketContext';
+import { useState } from 'react';
+import ReportModal from '../../common/ReportModal';
 
 const InformationFriend = ({
     _id,
@@ -28,6 +30,7 @@ const InformationFriend = ({
 }) => {
     const navigation = useNavigation();
     const { socket } = useSocketContext();
+    const [showReportModal, setShowReportModal] = useState(false);
     function convertDate(isoDate) {
         const date = new Date(isoDate);
         const formattedDate = date.toLocaleDateString('en-GB');
@@ -77,6 +80,26 @@ const InformationFriend = ({
         );
     };
 
+    const handleReport = async (data) => {
+        try {
+            // TODO: Call API to submit report
+            console.log('Report submitted:', data);
+            Alert.alert('Success', 'Report submitted successfully');
+            // You can add API call here:
+            // const url = 'https://se405-skillexchangebe.onrender.com/api/v1/report/create';
+            // const accessToken = await AsyncStorage.getItem('accessToken');
+            // await axios.post(url, {
+            //     userId: _id,
+            //     reason: data.reason,
+            //     images: data.images
+            // }, {
+            //     headers: { Authorization: `Bearer ${accessToken}` }
+            // });
+        } catch (error) {
+            Alert.alert('Error', 'Failed to submit report');
+        }
+    };
+
     return (
         <SafeAreaView
             style={{
@@ -104,6 +127,12 @@ const InformationFriend = ({
                     iconUrl={require('@assets/icons/cancel.svg')}
                     handlePress={() => {
                         handleConfirmDelete();
+                    }}
+                />
+                <CircleButton
+                    iconUrl={require('@assets/icons/Problem.png')}
+                    handlePress={() => {
+                        setShowReportModal(true);
                     }}
                 />
             </View>
@@ -174,6 +203,13 @@ const InformationFriend = ({
                     </View>
                 </View>
             </ScrollView>
+
+            <ReportModal
+                visible={showReportModal}
+                onClose={() => setShowReportModal(false)}
+                onSubmit={handleReport}
+                reportType="user"
+            />
         </SafeAreaView>
     );
 };

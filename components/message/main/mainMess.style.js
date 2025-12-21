@@ -94,10 +94,17 @@ export const styles= StyleSheet.create({
         flexDirection:'column',
     },
     Status:{
-        height:11,
-        width:11,
+        height:14,
+        width:14,
         borderRadius:20,
-        backgroundColor:'green'
+        backgroundColor:'green',
+        zIndex:1000,
+        marginTop:'auto',
+        marginLeft: -16,
+        marginBottom: 1,
+        borderColor: 'black',
+        borderWidth: 1
+
     },
     Online:{
         backgroundColor:'#04C100'

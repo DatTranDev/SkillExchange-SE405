@@ -24,11 +24,84 @@ export const Message = (props) => {
     const [sound, setSound] = useState(null);
     const [isPlay, setIsPlay] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
+    const [deleteModalVisible, setDeleteModalVisible] = useState(false);
     const [urlModal, setUrlModal] = useState();
     const [idCount, setIdCount] = useState(null);
     const [seconds, setSeconds] = useState(0);
     const [check, setCheck] = useState(false);
     const isFocused = useIsFocused();
+
+    // Helper function to get border radius based on position
+    const getBorderRadius = (position, isMyMessage) => {
+        if (isMyMessage) {
+            // My messages (right side) - adjust bottom-right corner
+            switch (position) {
+                case 'first':
+                    return {
+                        borderTopLeftRadius: 18,
+                        borderTopRightRadius: 18,
+                        borderBottomLeftRadius: 18,
+                        borderBottomRightRadius: 4,
+                    };
+                case 'middle':
+                    return {
+                        borderTopLeftRadius: 18,
+                        borderTopRightRadius: 18,
+                        borderBottomLeftRadius: 18,
+                        borderBottomRightRadius: 18,
+                    };
+                case 'last':
+                    return {
+                        borderTopLeftRadius: 18,
+                        borderTopRightRadius: 4,
+                        borderBottomLeftRadius: 18,
+                        borderBottomRightRadius: 18,
+                    };
+                case 'single':
+                default:
+                    return {
+                        borderTopLeftRadius: 18,
+                        borderTopRightRadius: 18,
+                        borderBottomLeftRadius: 18,
+                        borderBottomRightRadius: 4,
+                    };
+            }
+        } else {
+            // Other's messages (left side) - adjust bottom-left corner
+            switch (position) {
+                case 'first':
+                    return {
+                        borderTopLeftRadius: 18,
+                        borderTopRightRadius: 18,
+                        borderBottomLeftRadius: 4,
+                        borderBottomRightRadius: 18,
+                    };
+                case 'middle':
+                    return {
+                        borderTopLeftRadius: 18,
+                        borderTopRightRadius: 18,
+                        borderBottomLeftRadius: 18,
+                        borderBottomRightRadius: 18,
+                    };
+                case 'last':
+                    return {
+                        borderTopLeftRadius: 4,
+                        borderTopRightRadius: 18,
+                        borderBottomLeftRadius: 18,
+                        borderBottomRightRadius: 18,
+                    };
+                case 'single':
+                default:
+                    return {
+                        borderTopLeftRadius: 4,
+                        borderTopRightRadius: 18,
+                        borderBottomLeftRadius: 18,
+                        borderBottomRightRadius: 18,
+                    };
+            }
+        }
+    };
+
     useEffect(() => {
         if (isPlay) {
             setIsPlay(false);
@@ -90,6 +163,137 @@ export const Message = (props) => {
                         />
                     </View>
                 </View>
+            </Modal>
+        );
+    };
+
+    // Delete message modal handlers
+    const openDeleteModal = () => {
+        setDeleteModalVisible(true);
+    };
+
+    const closeDeleteModal = () => {
+        setDeleteModalVisible(false);
+    };
+
+    const handleDeleteMessage = async () => {
+        if (props.OnDelete) {
+            props.OnDelete();
+        }
+        closeDeleteModal();
+    };
+
+    const deleteMessageModal = () => {
+        return (
+            <Modal
+                visible={deleteModalVisible}
+                transparent={true}
+                animationType="fade"
+                onRequestClose={closeDeleteModal}
+            >
+                <TouchableOpacity
+                    style={{
+                        flex: 1,
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}
+                    activeOpacity={1}
+                    onPress={closeDeleteModal}
+                >
+                    <TouchableOpacity
+                        activeOpacity={1}
+                        style={{
+                            backgroundColor: '#FFFFFF',
+                            borderRadius: 16,
+                            padding: 20,
+                            width: '80%',
+                            maxWidth: 320,
+                            shadowColor: '#000',
+                            shadowOffset: { width: 0, height: 2 },
+                            shadowOpacity: 0.25,
+                            shadowRadius: 4,
+                            elevation: 5,
+                        }}
+                    >
+                        <View style={{
+                            alignItems: 'center',
+                            marginBottom: 16,
+                        }}>
+                            <View style={{
+                                width: 60,
+                                height: 60,
+                                borderRadius: 30,
+                                backgroundColor: '#FFE5E5',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                marginBottom: 12,
+                            }}>
+                                <Image
+                                    source={icons.delete_icon}
+                                    style={{ width: 28, height: 28 }}
+                                />
+                            </View>
+                            <Text style={{
+                                fontSize: 18,
+                                fontFamily: 'Inter-SemiBold',
+                                color: '#333333',
+                                marginBottom: 8,
+                            }}>
+                                Delete Message
+                            </Text>
+                            <Text style={{
+                                fontSize: 14,
+                                fontFamily: 'Inter-Regular',
+                                color: '#666666',
+                                textAlign: 'center',
+                            }}>
+                                Are you sure you want to delete this message? This action cannot be undone.
+                            </Text>
+                        </View>
+                        <View style={{
+                            flexDirection: 'row',
+                            gap: 12,
+                        }}>
+                            <TouchableOpacity
+                                onPress={closeDeleteModal}
+                                style={{
+                                    flex: 1,
+                                    paddingVertical: 12,
+                                    borderRadius: 10,
+                                    backgroundColor: '#F5F5F5',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <Text style={{
+                                    fontSize: 15,
+                                    fontFamily: 'Inter-SemiBold',
+                                    color: '#666666',
+                                }}>
+                                    Cancel
+                                </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={handleDeleteMessage}
+                                style={{
+                                    flex: 1,
+                                    paddingVertical: 12,
+                                    borderRadius: 10,
+                                    backgroundColor: '#FF3B30',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <Text style={{
+                                    fontSize: 15,
+                                    fontFamily: 'Inter-SemiBold',
+                                    color: '#FFFFFF',
+                                }}>
+                                    Delete
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </TouchableOpacity>
+                </TouchableOpacity>
             </Modal>
         );
     };
@@ -277,9 +481,10 @@ export const Message = (props) => {
 
     //Self-messages
     if (props.User == 'My message') {
+        const borderRadius = getBorderRadius(props.Position || 'single', true);
         switch (props.Type) {
             case 'text':
-                contentType = <Text style={styles.Message}> {props.Content}</Text>;
+                contentType = <Text style={[styles.Message, borderRadius]}> {props.Content}</Text>;
                 break;
             case 'image':
                 contentType = (
@@ -294,6 +499,7 @@ export const Message = (props) => {
                                 borderWidth: 1,
                             }}
                             onPress={openModal}
+                            onLongPress={openDeleteModal}
                         >
                             <Image
                                 style={{ width: '100%', height: '100%', resizeMode: 'cover' }}
@@ -305,51 +511,59 @@ export const Message = (props) => {
                 break;
             case 'record':
                 contentType = (
-                    <View
-                        style={{
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            maxWidth: 200,
-                            height: 45,
-                            borderRadius: 20,
-                            backgroundColor: '#FF9557',
-                            marginTop: 5,
-                            marginRight: 5,
-                            flexDirection: 'row',
-                            paddingHorizontal: 12,
-                            paddingVertical: 7,
-                        }}
+                    <TouchableOpacity
+                        onLongPress={openDeleteModal}
+                        activeOpacity={0.9}
                     >
-                        <TouchableOpacity onPress={handlePressPlay}>
-                            <Image
-                                source={isPlay ? icons.pause : icons.play}
-                                style={
-                                    isPlay
-                                        ? { width: 23, height: 23, resizeMode: 'cover' }
-                                        : {
-                                              width: 30,
-                                              height: 30,
-                                              resizeMode: 'cover',
-                                              marginHorizontal: 5,
-                                          }
-                                }
-                            />
-                        </TouchableOpacity>
-                        {!isPlay ? (
-                            ''
-                        ) : (
-                            <Text style={{ marginLeft: 2, fontSize: 16 }}>
-                                {' '}
-                                {formatTimeRecord(seconds)}
-                            </Text>
-                        )}
-                    </View>
+                        <View
+                            style={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                maxWidth: 200,
+                                height: 45,
+                                borderRadius: 18,
+                                backgroundColor: '#FF9557',
+                                marginTop: 5,
+                                marginRight: 5,
+                                flexDirection: 'row',
+                                paddingHorizontal: 12,
+                                paddingVertical: 7,
+                            }}
+                        >
+                            <TouchableOpacity onPress={handlePressPlay}>
+                                <Image
+                                    source={isPlay ? icons.pause : icons.play}
+                                    style={
+                                        isPlay
+                                            ? { width: 23, height: 23, resizeMode: 'cover' }
+                                            : {
+                                                width: 30,
+                                                height: 30,
+                                                resizeMode: 'cover',
+                                                marginHorizontal: 5,
+                                            }
+                                    }
+                                />
+                            </TouchableOpacity>
+                            {!isPlay ? (
+                                ''
+                            ) : (
+                                <Text style={{ marginLeft: 2, fontSize: 16 }}>
+                                    {' '}
+                                    {formatTimeRecord(seconds)}
+                                </Text>
+                            )}
+                        </View>
+                    </TouchableOpacity>
                 );
                 break;
             case 'file':
                 const fileName = getFileName(props.Content);
                 contentType = (
-                    <TouchableOpacity onPress={getFile}>
+                    <TouchableOpacity
+                        onPress={getFile}
+                        onLongPress={openDeleteModal}
+                    >
                         <View
                             style={{
                                 flexDirection: 'row',
@@ -378,16 +592,25 @@ export const Message = (props) => {
         return (
             <View style={styles.Layout}>
                 {modalImage()}
-                <View style={styles.MessContainer}>{contentType}</View>
+                {deleteMessageModal()}
+                <View style={styles.MessContainer}>
+                    <TouchableOpacity
+                        onLongPress={openDeleteModal}
+                        activeOpacity={0.7}
+                    >
+                        {contentType}
+                    </TouchableOpacity>
+                </View>
                 {props.Time != '' ? <Text style={styles.Time}>{props.Time}</Text> : <View />}
             </View>
         );
     }
     //not Self-messages
     else {
+        const borderRadius = getBorderRadius(props.Position || 'single', false);
         switch (props.Type) {
             case 'text':
-                contentType = <Text style={styles.Message2}> {props.Content}</Text>;
+                contentType = <Text style={[styles.Message2, borderRadius]}> {props.Content}</Text>;
                 break;
             case 'image':
                 contentType = (
@@ -419,7 +642,7 @@ export const Message = (props) => {
                             alignItems: 'center',
                             maxWidth: 200,
                             height: 45,
-                            borderRadius: 20,
+                            borderRadius: 18,
                             backgroundColor: '#FF9557',
                             marginTop: 5,
                             marginRight: 5,
@@ -435,11 +658,11 @@ export const Message = (props) => {
                                     isPlay
                                         ? { width: 23, height: 23, resizeMode: 'cover' }
                                         : {
-                                              width: 30,
-                                              height: 30,
-                                              resizeMode: 'cover',
-                                              marginHorizontal: 5,
-                                          }
+                                            width: 30,
+                                            height: 30,
+                                            resizeMode: 'cover',
+                                            marginHorizontal: 5,
+                                        }
                                 }
                             />
                         </TouchableOpacity>
@@ -493,8 +716,8 @@ export const Message = (props) => {
                                 props.Avatar == 'no'
                                     ? icons.while_icon
                                     : props.Avatar == '' || !props.Avatar
-                                    ? require('assets/images/avatarDefault.jpg')
-                                    : { uri: props.Avatar }
+                                        ? require('assets/images/avatarDefault.jpg')
+                                        : { uri: props.Avatar }
                             }
                             style={styles.Avatar}
                         />

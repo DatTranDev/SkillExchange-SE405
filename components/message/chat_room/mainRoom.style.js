@@ -130,7 +130,7 @@ export const styles = StyleSheet.create(
        maxWidth:200,
        fontFamily:'Inter-Regular',
        fontSize:15,
-       marginTop:5,
+       marginTop:3,
        marginRight:5,
        color:'#FFFFFF'
         
@@ -166,7 +166,7 @@ export const styles = StyleSheet.create(
        maxWidth:'70%',
        fontFamily:'Inter-Regular',
        fontSize:15,
-       marginTop:5,
+       marginTop:3,
        marginLeft:5
         
     },

@@ -36,7 +36,7 @@ import PostData from '../../../utils/postdata';
 import HandleSessionExpired from '../../../utils/handlesession';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MessageProvider, MessageContext } from './messageContext';
-import { err } from 'react-native-svg';
+import DeleteData from '../../../utils/deletedata';
 
 const ContentScreen = () => {
     const route = useRoute();
@@ -191,6 +191,18 @@ const ContentScreen = () => {
         // Kiểm tra nếu hiệu của hai thời điểm lớn hơn 10 phút
         return diffMinutes > 5;
     };
+    const handleDeleteMessage = async (messageId) => {
+        const url = `https://se405-skillexchangebe.onrender.com/api/v1/message/delete/${messageId}`;
+        const dataSend = {
+            senderID: user.id,
+        }
+        const data = await DeleteData(url, dataSend);
+        if (data !== 'Something went wrong') {
+            setMessageList(messageList.filter((item) => item._id !== messageId));
+        } else {
+            Alert.alert('Error', 'Something went wrong');
+        }
+    };
     const renderMessage = () => {
         const list = [];
         let start = 0;
@@ -201,6 +213,8 @@ const ContentScreen = () => {
             for (let i = start; i < messageList.length; i++) {
                 let sender = '';
                 let time = new Date(messageList[i].dateTime);
+                let position = 'single'; // single, first, middle, last
+
                 if (i - 1 >= 0) {
                     timeBefore = new Date(messageList[i - 1].dateTime);
                     if (timeBefore) {
@@ -219,6 +233,21 @@ const ContentScreen = () => {
                 if (messageList[i].senderID.id === user.id) {
                     sender = 'My message';
                 }
+
+                // Determine message position in group
+                const hasPrevSameSender = i > 0 && messageList[i - 1].senderID.id === messageList[i].senderID.id && !checkTimeDifference(new Date(messageList[i - 1].dateTime), new Date(messageList[i].dateTime));
+                const hasNextSameSender = i < messageList.length - 1 && messageList[i].senderID.id === messageList[i + 1].senderID.id && !checkTimeDifference(new Date(messageList[i].dateTime), new Date(messageList[i + 1].dateTime));
+
+                if (hasPrevSameSender && hasNextSameSender) {
+                    position = 'middle';
+                } else if (hasPrevSameSender && !hasNextSameSender) {
+                    position = 'last';
+                } else if (!hasPrevSameSender && hasNextSameSender) {
+                    position = 'first';
+                } else {
+                    position = 'single';
+                }
+
                 if (i + 1 < messageList.length) {
                     if (messageList[i].senderID.id == messageList[i + 1].senderID.id) {
                         if (
@@ -236,6 +265,8 @@ const ContentScreen = () => {
                                     Avatar="no"
                                     Type={messageList[i].type}
                                     Function={getFile}
+                                    Position={position}
+                                    OnDelete={() => handleDeleteMessage(messageList[i]._id)}
                                 />
                             );
                         } else {
@@ -248,6 +279,8 @@ const ContentScreen = () => {
                                     Avatar="no"
                                     Type={messageList[i].type}
                                     Function={getFile}
+                                    Position={position}
+                                    OnDelete={() => handleDeleteMessage(messageList[i]._id)}
                                 />
                             );
                         }
@@ -261,6 +294,8 @@ const ContentScreen = () => {
                                 Avatar={messageList[i].senderID.avatar}
                                 Type={messageList[i].type}
                                 Function={getFile}
+                                Position={position}
+                                OnDelete={() => handleDeleteMessage(messageList[i]._id)}
                             />
                         );
                     }
@@ -274,6 +309,8 @@ const ContentScreen = () => {
                             Avatar={messageList[i].senderID.avatar}
                             Type={messageList[i].type}
                             Function={getFile}
+                            Position={position}
+                            OnDelete={() => handleDeleteMessage(messageList[i]._id)}
                         />
                     );
                 }
@@ -336,7 +373,7 @@ const ContentScreen = () => {
     };
     const sendMessage = async (Type, Content) => {
         if (!Content) {
-            Content = message;
+            Content = message.trim();
             setMessage('');
         }
 
