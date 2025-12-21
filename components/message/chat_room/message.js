@@ -47,9 +47,9 @@ export const Message = (props) => {
                 case 'middle':
                     return {
                         borderTopLeftRadius: 18,
-                        borderTopRightRadius: 18,
+                        borderTopRightRadius: 4,
                         borderBottomLeftRadius: 18,
-                        borderBottomRightRadius: 18,
+                        borderBottomRightRadius: 4,
                     };
                 case 'last':
                     return {
@@ -79,9 +79,9 @@ export const Message = (props) => {
                     };
                 case 'middle':
                     return {
-                        borderTopLeftRadius: 18,
+                        borderTopLeftRadius: 4,
                         borderTopRightRadius: 18,
-                        borderBottomLeftRadius: 18,
+                        borderBottomLeftRadius: 4,
                         borderBottomRightRadius: 18,
                     };
                 case 'last':
