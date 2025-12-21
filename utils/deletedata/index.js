@@ -3,19 +3,21 @@ import axios from 'axios';
 import CheckRefreshToken from '../checkrefreshtoken';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const DeleteData = (url,data) => {
-    console.log(url);
+const DeleteData = (url, data) => {
     const deleteUsingAccessToken = async () => {
         const accessToken = await AsyncStorage.getItem('accessToken');
-        console.log(accessToken);
         try {
-            const response = await axios.delete(url,data, {
+            const response = await axios.delete(url, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 },
+                data: data,
             });
             return response.data;
         } catch (error) {
+            if (!error.response) {
+                return 'Something went wrong';
+            }
             if (error.response.status !== 401) {
                 return 'Something went wrong';
             } else {
@@ -25,7 +27,7 @@ const DeleteData = (url,data) => {
                     HandleSessionExpired();
                 } else {
                     await AsyncStorage.setItem('accessToken', newAccessToken);
-                    deleteUsingAccessToken();
+                    return deleteUsingAccessToken();
                 }
             }
         }

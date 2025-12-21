@@ -50,6 +50,7 @@ const ContentScreen = () => {
     const [seconds, setSeconds] = useState(0);
     const [idCount, setIdCount] = useState(null);
     const [isRecordMessage, setIsRecordMessage] = useState(true);
+    const [isSending, setIsSending] = useState(false);
     const [messageList, setMessageList] = useState([]);
     const [chatId, setChatId] = useState(route.params.chatId); //router.param.chatID
     const { chat } = route.params;
@@ -140,6 +141,22 @@ const ContentScreen = () => {
             socket.off('isUnFriend');
         };
     }, []);
+
+    useEffect(() => {
+        if (socket === null) return;
+
+        socket.on('recieveDeletedMsg', (res) => {
+            if (chatId !== res.chatID) return;
+            // Remove the deleted message from the message list
+            setMessageList((prevMessages) =>
+                prevMessages.filter((msg) => msg._id !== res.messageID)
+            );
+        });
+
+        return () => {
+            socket.off('recieveDeletedMsg');
+        };
+    }, [socket, chatId]);
     //set up
     const formatTimeRecord = (time) => {
         const minutes = Math.floor((time % 3600) / 60);
@@ -199,6 +216,16 @@ const ContentScreen = () => {
         const data = await DeleteData(url, dataSend);
         if (data !== 'Something went wrong') {
             setMessageList(messageList.filter((item) => item._id !== messageId));
+
+            // Emit socket event to notify other user
+            if (socket) {
+                const recipientID = chat?.members?.find((member) => member.id !== user.id)?._id;
+                socket.emit('deleteMessage', {
+                    chatID: chatId,
+                    recipientID: recipientID,
+                    messageID: messageId,
+                });
+            }
         } else {
             Alert.alert('Error', 'Something went wrong');
         }
@@ -267,6 +294,7 @@ const ContentScreen = () => {
                                     Function={getFile}
                                     Position={position}
                                     OnDelete={() => handleDeleteMessage(messageList[i]._id)}
+                                    IsSending={messageList[i].isSending || false}
                                 />
                             );
                         } else {
@@ -281,6 +309,7 @@ const ContentScreen = () => {
                                     Function={getFile}
                                     Position={position}
                                     OnDelete={() => handleDeleteMessage(messageList[i]._id)}
+                                    IsSending={messageList[i].isSending || false}
                                 />
                             );
                         }
@@ -296,6 +325,7 @@ const ContentScreen = () => {
                                 Function={getFile}
                                 Position={position}
                                 OnDelete={() => handleDeleteMessage(messageList[i]._id)}
+                                IsSending={messageList[i].isSending || false}
                             />
                         );
                     }
@@ -311,6 +341,7 @@ const ContentScreen = () => {
                             Function={getFile}
                             Position={position}
                             OnDelete={() => handleDeleteMessage(messageList[i]._id)}
+                            IsSending={messageList[i].isSending || false}
                         />
                     );
                 }
@@ -393,15 +424,47 @@ const ContentScreen = () => {
             content: Content,
             type: Type,
             senderID: user,
+            isSending: true,
         };
         setMessageList([...messageList, msg]);
+        setIsSending(true);
+
         const url = 'https://se405-skillexchangebe.onrender.com/api/v1/message/send';
         const response = await PostData(url, dataPost);
+
+        setIsSending(false);
+
         if (response != 404 && response !== 'Something went wrong' && response) {
-            if (socket === null) return;
-            const recipientID = chat?.members?.find((member) => member.id !== user.id)._id;
-            socket.emit('sendMessage', { ...response.data, recipientID });
-            return true;
+            // Kiểm tra nếu có lỗi nội dung nhạy cảm (status 400 từ backend)
+            if (response.message && !response.data) {
+                if (response.message.includes('inappropriate content') ||
+                    response.message.includes('cannot be sent')) {
+                    const msgList = messageList.filter((value) => value._id != idMsg);
+                    setMessageList([...msgList]);
+                    Alert.alert(
+                        'Nội dung nhạy cảm',
+                        'Tin nhắn của bạn chứa nội dung không phù hợp và không thể được gửi.',
+                        [{ text: 'OK' }]
+                    );
+                    return false;
+                }
+            }
+
+            // Cập nhật message với dữ liệu từ server (chỉ khi có response.data)
+            if (response.data) {
+                const msgList = messageList.filter((value) => value._id != idMsg);
+                setMessageList([...msgList, response.data]);
+
+                if (socket === null) return;
+                const recipientID = chat?.members?.find((member) => member.id !== user.id)._id;
+                socket.emit('sendMessage', { ...response.data, recipientID });
+                return true;
+            } else {
+                const msgList = messageList.filter((value) => value._id != idMsg);
+                setMessageList([...msgList]);
+                Alert.alert('Alert', 'Message could not be sent');
+                return false;
+            }
         } else {
             const msgList = messageList.filter((value) => value._id != idMsg);
             setMessageList([...msgList]);

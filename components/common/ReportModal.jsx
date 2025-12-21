@@ -11,9 +11,13 @@ import {
     ActivityIndicator,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import mime from 'react-native-mime-types';
+import PostData from '../../utils/postdata';
+import CheckRefreshToken from '../../utils/checkrefreshtoken';
 import { icons } from '@constants';
 
-const ReportModal = ({ visible, onClose, onSubmit, reportType = 'user' }) => {
+const ReportModal = ({ visible, onClose, onSubmit, reportType = 'user', senderID, targetID }) => {
     const [reason, setReason] = useState('');
     const [image, setImage] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -45,34 +49,37 @@ const ReportModal = ({ visible, onClose, onSubmit, reportType = 'user' }) => {
     };
 
     const uploadImage = async (imageUri) => {
-            const access = await AsyncStorage.getItem('accessToken');
-            const formData = new FormData();
-            const extension = imageUri.split('.').pop();
-            const type = mime.lookup(extension);
-            const name = 'report-' + Date.now();
-            formData.append('file', {
-                name: `${name}`,
-                type: type,
-                uri: imageUri,
-            });
-            try {
-                const response = await fetch(
-                    'https://se405-skillexchangebe.onrender.com/api/v1/upload/file',
-                    {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'Content-Type': 'multipart/form-data',
-                            Authorization: `Bearer ${access}`,
-                        },
-                    }
-                );
-                if (response.status == 200) {
-                    const json = await response.json();
-                    return json.image;
-                } else {
-                    if (response.status == 401) {
-                        access = await loadToken();
+        const access = await AsyncStorage.getItem('accessToken');
+        const formData = new FormData();
+        const extension = imageUri.split('.').pop();
+        const type = mime.lookup(extension);
+        const name = 'report-' + Date.now();
+        formData.append('file', {
+            name: `${name}`,
+            type: type,
+            uri: imageUri,
+        });
+        try {
+            const response = await fetch(
+                'https://se405-skillexchangebe.onrender.com/api/v1/upload/file',
+                {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `Bearer ${access}`,
+                    },
+                }
+            );
+            if (response.status == 200) {
+                const json = await response.json();
+                return json.image;
+            } else {
+                if (response.status == 401) {
+                    const refreshToken = await AsyncStorage.getItem('refreshToken');
+                    const newAccess = await CheckRefreshToken(refreshToken);
+                    if (newAccess && newAccess !== 'Session expired') {
+                        await AsyncStorage.setItem('accessToken', newAccess);
                         const response2 = await fetch(
                             'https://se405-skillexchangebe.onrender.com/api/v1/upload/file',
                             {
@@ -80,7 +87,7 @@ const ReportModal = ({ visible, onClose, onSubmit, reportType = 'user' }) => {
                                 body: formData,
                                 headers: {
                                     'Content-Type': 'multipart/form-data',
-                                    Authorization: `Bearer ${access}`,
+                                    Authorization: `Bearer ${newAccess}`,
                                 },
                             }
                         );
@@ -90,31 +97,61 @@ const ReportModal = ({ visible, onClose, onSubmit, reportType = 'user' }) => {
                         }
                     }
                 }
-                Alert.alert('Alert', 'Unable to send photo');
-                return false;
-            } catch (error) {
-                Alert.alert('Alert', 'Unable to send photo');
-                return false;
-            } finally {
-                setUploading(false);
             }
-        };
+            Alert.alert('Alert', 'Unable to send photo');
+            return false;
+        } catch (error) {
+            Alert.alert('Alert', 'Unable to send photo');
+            return false;
+        }
+    };
+
+
 
     const handleSubmit = async () => {
-        let imageUrl = null;
-        if (image) {
-            imageUrl = await uploadImage(image);
-        }
         if (!reason.trim()) {
             Alert.alert('Error', 'Please provide a reason for reporting');
             return;
         }
+
+        if (!senderID || !targetID) {
+            Alert.alert('Error', 'Missing sender or target information');
+            return;
+        }
+
         setIsSubmitting(true);
         try {
-            const url= "https://se405-skillexchangebe.onrender.com/api/v1/report"
-            handleClose();
+            let imageUrl = null;
+            if (image) {
+                imageUrl = await uploadImage(image);
+                if (!imageUrl) {
+                    setIsSubmitting(false);
+                    return;
+                }
+            }
+
+            const reportData = {
+                senderID: senderID,
+                targetID: targetID,
+                content: reason,
+                evidence: imageUrl || ''
+            };
+
+            const url = 'https://se405-skillexchangebe.onrender.com/api/v1/report/add';
+            const response = await PostData(url, reportData);
+
+            if (response && response !== 'Something went wrong' && response !== '404') {
+                Alert.alert('Success', 'Report submitted successfully');
+                if (onSubmit) {
+                    onSubmit(response.data || response);
+                }
+                handleClose();
+            } else {
+                Alert.alert('Error', 'Failed to submit report. Please try again.');
+            }
         } catch (error) {
-            Alert.alert('Error', 'Failed to submit report');
+            console.error('Error submitting report:', error);
+            Alert.alert('Error', 'Network error. Please check your connection and try again.');
         } finally {
             setIsSubmitting(false);
         }

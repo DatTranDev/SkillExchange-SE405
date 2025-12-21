@@ -15,8 +15,13 @@ const PostData = (url, data) => {
 			});
 			return response.data;
 		} catch (error) {
+			if (!error.response) {
+				return "Something went wrong";
+			}
 			if (error.response.status === 404) {
 				return "404";
+			} else if (error.response.status === 400) {
+				return error.response.data;
 			} else if (error.response.status !== 401) {
 				return "Something went wrong";
 			} else {
@@ -26,7 +31,7 @@ const PostData = (url, data) => {
 					HandleSessionExpired();
 				} else {
 					await AsyncStorage.setItem("accessToken", newAccessToken);
-					postUsingAccessToken();
+					return postUsingAccessToken();
 				}
 			}
 		}

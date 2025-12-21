@@ -14,8 +14,9 @@ import GetData from '../../../utils/getdata';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useSocketContext } from '../../../context/SocketContext';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ReportModal from '../../common/ReportModal';
+import { useSession } from '../../../context/AuthContext';
 
 const InformationFriend = ({
     _id,
@@ -30,7 +31,9 @@ const InformationFriend = ({
 }) => {
     const navigation = useNavigation();
     const { socket } = useSocketContext();
+    const { user, login, logout } = useSession();
     const [showReportModal, setShowReportModal] = useState(false);
+    const [currentUserID, setCurrentUserID] = useState(null);
     function convertDate(isoDate) {
         const date = new Date(isoDate);
         const formattedDate = date.toLocaleDateString('en-GB');
@@ -83,7 +86,6 @@ const InformationFriend = ({
     const handleReport = async (data) => {
         try {
             // TODO: Call API to submit report
-            console.log('Report submitted:', data);
             Alert.alert('Success', 'Report submitted successfully');
             // You can add API call here:
             // const url = 'https://se405-skillexchangebe.onrender.com/api/v1/report/create';
@@ -209,6 +211,8 @@ const InformationFriend = ({
                 onClose={() => setShowReportModal(false)}
                 onSubmit={handleReport}
                 reportType="user"
+                senderID={user.id}
+                targetID={_id}
             />
         </SafeAreaView>
     );

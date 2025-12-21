@@ -9,6 +9,7 @@ import {
     TextInput,
     Modal,
     Alert,
+    ActivityIndicator,
 } from 'react-native';
 import { registerRootComponent } from 'expo';
 import { icons } from '@constants';
@@ -484,7 +485,20 @@ export const Message = (props) => {
         const borderRadius = getBorderRadius(props.Position || 'single', true);
         switch (props.Type) {
             case 'text':
-                contentType = <Text style={[styles.Message, borderRadius]}> {props.Content}</Text>;
+                contentType = (
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Text style={[styles.Message, borderRadius, props.IsSending && { opacity: 0.6 }]}>
+                            {' '}{props.Content}
+                        </Text>
+                        {props.IsSending && (
+                            <ActivityIndicator
+                                size="small"
+                                color="#FF9557"
+                                style={{ marginLeft: 5, marginRight: 5 }}
+                            />
+                        )}
+                    </View>
+                );
                 break;
             case 'image':
                 contentType = (

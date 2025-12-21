@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, Alert } from "react-native";
 import { Stack } from "expo-router";
 import { SafeAreaView, StyleSheet } from "react-native";
 import { COLORS } from "@constants";
@@ -9,8 +9,12 @@ import { CircleButton } from "../../components";
 import { router } from "expo-router";
 import avatarDefault from "@assets/images/avatarDefault.jpg";
 import { useAction } from "../../utils/useAction";
+import { useState } from "react";
+import { useSession } from "../../context/AuthContext";
+import ReportModal from "../common/ReportModal";
 
 const Information = ({
+	_id,
 	username,
 	skill,
 	birthDay,
@@ -21,6 +25,8 @@ const Information = ({
 }) => {
 	const swipeLeft = useAction((state) => state.swipeLeft);
 	const swipeRight = useAction((state) => state.swipeRight);
+	const { user } = useSession();
+	const [showReportModal, setShowReportModal] = useState(false);
 
 	function convertDate(isoDate) {
 		const date = new Date(isoDate);
@@ -30,6 +36,14 @@ const Information = ({
 
 	const handleBackButton = () => {
 		router.back();
+	};
+
+	const handleReport = async (data) => {
+		try {
+			Alert.alert('Success', 'Report submitted successfully');
+		} catch (error) {
+			Alert.alert('Error', 'Failed to submit report');
+		}
 	};
 
 	return (
@@ -60,6 +74,12 @@ const Information = ({
 					handlePress={() => {
 						router.back();
 						swipeLeft();
+					}}
+				/>
+				<CircleButton
+					iconUrl={require("@assets/icons/Problem.png")}
+					handlePress={() => {
+						setShowReportModal(true);
 					}}
 				/>
 				<CircleButton
@@ -137,6 +157,15 @@ const Information = ({
 					</View>
 				</View>
 			</ScrollView>
+
+			<ReportModal
+				visible={showReportModal}
+				onClose={() => setShowReportModal(false)}
+				onSubmit={handleReport}
+				reportType="user"
+				senderID={user?.id}
+				targetID={_id}
+			/>
 		</SafeAreaView>
 	);
 };
