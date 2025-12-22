@@ -4,16 +4,6 @@ import PostData from '../../../utils/postdata';
 import { useSession } from '../../../context/AuthContext';
 import { API_CONFIG } from '../../../constants';
 
-export const onSwipeRight = async (index, user, users) => {
-    let data;
-    do {
-        data = await PostData(`${API_CONFIG.BASE_URL}/api/v1/request/create`, {
-            senderID: user.id,
-            receiverID: users[index].id,
-        });
-    } while (data === 'Something went wrong');
-};
-
 const SwiperList = ({
     users, // List user cần show để lướt
     swiperRef, // Reference đến swiper (để lấy các property của thư viện swiper)
@@ -21,10 +11,27 @@ const SwiperList = ({
 }) => {
     const { user } = useSession();
 
+    const handleSwipeRight = async (index) => {
+        try {
+            const data = await PostData(`${API_CONFIG.BASE_URL}/api/v1/request/create`, {
+                senderID: user.id,
+                receiverID: users[index]?.id,
+            });
+
+            if (data && data !== 'Something went wrong') {
+                console.log('Request created successfully:', data);
+            } else {
+                console.error('Failed to create request');
+            }
+        } catch (error) {
+            console.error('Error creating request:', error);
+        }
+    };
+
     return (
         <Swiper
             ref={swiperRef}
-            onSwipedRight={onSwipeRight}
+            onSwipedRight={handleSwipeRight}
             cardStyle={{ height: '100%', width: '100%' }}
             cardHorizontalMargin={0}
             backgroundColor="white"

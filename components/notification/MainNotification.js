@@ -16,39 +16,6 @@ const ScreenNotification = () => {
     const { user, login, logout } = useSession();
     const isFocused = useIsFocused();
 
-    const loadToken = async () => {
-        // const token = await AsyncStorage.getItem('refreshToken');
-        // if(token)
-        // {
-        // 	const access=await CheckRefreshToken(token);
-        // 	if(access===null || access=="Session expired")
-        // 	{
-        //     //await logout();
-        // 	}
-        // 	else
-        // 	{
-        // 		setAccessToken(access);
-        // 	}
-        // }
-        // else
-        // {
-        // 	await logout();
-        // }
-    };
-    const createRequest = async () => {
-        const response = await fetch(`${API_CONFIG.BASE_URL}/api/v1/request/create`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization:
-                    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjFjMWM5OTkyOGZhZDhhMGU4ZDAxZTYiLCJ0eXBlIjoicmVmcmVzaCIsImlhdCI6MTcxNTE5NTk4NywiZXhwIjoxNzE3Nzg3OTg3fQ.9tlJNB-8NqfxtxeJ2Y0khcmuucbEUvdo0zSPe49ctg4',
-            },
-            body: JSON.stringify({
-                senderID: '661c1c99928fad8a0e8d01e6',
-                receiverID: '661aceb50b954258a9b6dc70 ',
-            }),
-        });
-    };
     const refeshReques = (idRemove) => {
         const newRes = requests.filter((res) => res._id !== idRemove);
         setRequest(newRes);

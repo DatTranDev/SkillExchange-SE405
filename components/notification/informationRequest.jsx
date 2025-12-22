@@ -16,6 +16,8 @@ import { Alert } from 'react-native';
 import PostData from '../../utils/postdata';
 import HandleSessionExpired from '../../utils/handlesession';
 import { useSocketContext } from '../../context/SocketContext';
+import { useState } from 'react';
+import ReportModal from '../common/ReportModal';
 
 const InformationRequest = ({
     username,
@@ -48,6 +50,7 @@ const InformationRequest = ({
     const swipeLeft = useAction((state) => state.swipeLeft);
     const swipeRight = useAction((state) => state.swipeRight);
     const { socket } = useSocketContext();
+    const [showReportModal, setShowReportModal] = useState(false);
     const createChat = async (id1, id2) => {
         const dataPost = {
             firstID: id1,
@@ -164,6 +167,12 @@ const InformationRequest = ({
                         handlePressAccept();
                     }}
                 />
+                <CircleButton
+                    iconUrl={require('@assets/icons/Problem.png')}
+                    handlePress={() => {
+                        setShowReportModal(true);
+                    }}
+                />
             </View>
 
             <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
@@ -228,6 +237,15 @@ const InformationRequest = ({
                     </View>
                 </View>
             </ScrollView>
+
+            <ReportModal
+                visible={showReportModal}
+                onClose={() => setShowReportModal(false)}
+                onSubmit={() => { }}
+                reportType="user"
+                senderID={user.id}
+                targetID={_id}
+            />
         </SafeAreaView>
     );
 };

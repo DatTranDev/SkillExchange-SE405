@@ -71,6 +71,7 @@ export const styles = StyleSheet.create({
         elevation: 3,
         borderWidth: 1,
         borderColor: '#F0F0F0',
+        marginBottom: 4,
     },
     AvatarContainer: {
         borderRadius: 26,
