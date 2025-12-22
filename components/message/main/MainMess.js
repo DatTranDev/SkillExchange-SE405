@@ -83,6 +83,33 @@ const ScreenMess = () => {
 			socket.off("getnewchatroom");
 		}
 	}, [chatRooms, socket, chatAppear])
+
+	// Listen for latest message updates (e.g., after message deletion)
+	useEffect(() => {
+		if (socket == null) return;
+
+		socket.on("updateLatestMessage", (res) => {
+			const { chatID, latestMessage } = res;
+
+			// Update latestMessage state
+			const msg = latestMessage.findIndex((message) => message.chatID === chatID);
+			if (msg !== -1) {
+				const newLatestMessage = [...latestMessage];
+				if (latestMessage) {
+					newLatestMessage[msg] = latestMessage;
+				} else {
+					// Remove if no latest message (all messages deleted)
+					newLatestMessage.splice(msg, 1);
+				}
+				setLatestMessage(newLatestMessage);
+			}
+		});
+
+		return () => {
+			socket.off("updateLatestMessage");
+		};
+	}, [socket, latestMessage]);
+
 	const moveItemToTop = (items, targetId) => {
 		// Tìm vị trí của item có item.chatInfo._id trùng với targetId
 		const index = items.findIndex(item => item.chatInfo._id === targetId);
@@ -99,23 +126,6 @@ const ScreenMess = () => {
 		return [item, ...items];
 	};
 
-
-	const loadToken = async () => {
-		const token = await AsyncStorage.getItem('refreshToken');
-		if (token) {
-			const access = await CheckRefreshToken(token);
-			if (access === null || access === "Session expired") {
-				await logout();
-			}
-			else {
-				setAccessToken(access);
-
-			}
-		}
-		else {
-			await logout();
-		}
-	}
 
 	const loadChat = async () => {
 		const url = `https://se405-skillexchangebe.onrender.com/api/v1/chat/find/${user.id}`
@@ -158,7 +168,7 @@ const ScreenMess = () => {
 
 	useEffect(() => {
 		loadChat();
-	}, [isFocused])
+	}, [])
 	useEffect(() => {
 		const loadFont = async () => {
 			await loadFonts();
@@ -234,20 +244,20 @@ const ScreenMess = () => {
 	};
 
 
-    return (
-        <View style={styles.Horizon}>
-            <View style={styles.Container}>
-                <Text style={styles.Header}>Message</Text>
-                <View style={styles.Search}>
-                    <Image source={icons.search_icon} style={styles.IconSearch}></Image>
-                    <TextInput
-                        placeholder="Search"
-                        style={styles.Input}
-                        value={searchText}
-                        onChangeText={handleSearch}
-                    ></TextInput>
-                </View>
-            </View>
+	return (
+		<View style={styles.Horizon}>
+			<View style={styles.Container}>
+				<Text style={styles.Header}>Message</Text>
+				<View style={styles.Search}>
+					<Image source={icons.search_icon} style={styles.IconSearch}></Image>
+					<TextInput
+						placeholder="Search"
+						style={styles.Input}
+						value={searchText}
+						onChangeText={handleSearch}
+					></TextInput>
+				</View>
+			</View>
 
 			<View style={styles.Scroll} >
 

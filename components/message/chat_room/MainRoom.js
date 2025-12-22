@@ -215,9 +215,11 @@ const ContentScreen = () => {
         }
         const data = await DeleteData(url, dataSend);
         if (data !== 'Something went wrong') {
-            setMessageList(messageList.filter((item) => item._id !== messageId));
+            // Remove message from local list
+            const updatedMessageList = messageList.filter((item) => item._id !== messageId);
+            setMessageList(updatedMessageList);
 
-            // Emit socket event to notify other user
+            // Emit socket event to notify other user about deletion
             if (socket) {
                 const recipientID = chat?.members?.find((member) => member.id !== user.id)?._id;
                 socket.emit('deleteMessage', {
@@ -225,6 +227,20 @@ const ContentScreen = () => {
                     recipientID: recipientID,
                     messageID: messageId,
                 });
+
+                // Find the new latest message after deletion
+                const newLatestMessage = updatedMessageList.length > 0
+                    ? updatedMessageList[updatedMessageList.length - 1]
+                    : null;
+
+                // Emit updated latest message to update chat list
+                if (newLatestMessage) {
+                    socket.emit('sendMessage', {
+                        ...newLatestMessage,
+                        recipientID,
+                        chatID: chatId
+                    });
+                }
             }
         } else {
             Alert.alert('Error', 'Something went wrong');

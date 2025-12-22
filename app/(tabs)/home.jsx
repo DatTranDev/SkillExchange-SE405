@@ -92,9 +92,9 @@ const Home = () => {
     const getUsers = async () => {
         setIsLoading(true);
         const usersByTopic = await getUsersByTopic(user);
-        if (usersByTopic.length === 0) {
+        if (usersByTopic.length === 0 || usersByTopic === 'Something went wrong' || !Array.isArray(usersByTopic)) {
             const allUsers = await GetData(`${API_CONFIG.BASE_URL}/api/v1/user/find`);
-            if (allUsers.length === 0) {
+            if (allUsers.length === 0 || allUsers === 'Something went wrong' || !Array.isArray(allUsers)) {
                 setIsEndUsers(true);
                 setIsLoading(false);
                 return;

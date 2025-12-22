@@ -137,7 +137,7 @@ const Login = ({ navigation }) => {
                     Terms of Service and Privacy Policy
                 </Text>
             </TouchableOpacity>
-            <ScrollView style={{ marginTop: 10 }}>
+            <View style={{ marginTop: 10 }}>
                 <InputText
                     placeholder="Enter your email address"
                     label="Email"
@@ -155,7 +155,7 @@ const Login = ({ navigation }) => {
                     iconName="lock"
                     onChangeText={(text) => setPassword(text)}
                 />
-            </ScrollView>
+            </View>
             <TouchableOpacity
                 style={{ width: scale(120), alignSelf: 'flex-end' }}
                 onPress={() => navigation.navigate('ForgotPassword')}
@@ -165,12 +165,12 @@ const Login = ({ navigation }) => {
                         color: COLORS.orange,
                         alignSelf: 'flex-end',
                         marginRight: 20,
-                        marginTop: 10,
                         fontFamily: 'AbhayaLibre-Regular',
                         fontSize: scale(10),
+                        marginTop: 4
                     }}
                 >
-                    Forgot password?
+                    Forgot password ?
                 </Text>
             </TouchableOpacity>
             <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 10 }}>
