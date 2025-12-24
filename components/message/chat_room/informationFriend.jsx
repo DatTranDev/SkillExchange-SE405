@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { Stack } from 'expo-router';
 import { SafeAreaView, StyleSheet } from 'react-native';
-import { COLORS, API_CONFIG } from '@constants';
+import { COLORS, API_CONFIG, buildApiUrl } from '@constants';
 import { Image } from 'expo-image';
 import { BackHeader } from '../../../components';
 import { Topic } from '../../../components';
@@ -45,7 +45,7 @@ const InformationFriend = ({
         // navigation.navigate('(tabs)')
     };
     const handleDeleteFriend = async () => {
-        const url = `${API_CONFIG.BASE_URL}/api/v1/chat/delete/${chatId}`;
+        const url = buildApiUrl(`/chat/delete/${chatId}`);
         const accessToken = await AsyncStorage.getItem('accessToken');
         try {
             const response = await axios.delete(url, {
@@ -61,7 +61,7 @@ const InformationFriend = ({
                 Alert.alert('Alert', 'An error has occurred. Please try again later.');
             }
         } catch (error) {
-            Alert.alert('Alert', 'An error has occurred. Please try again later.');
+            //Alert.alert('Alert', 'An error has occurred. Please try again later.');
         }
     };
     const handleConfirmDelete = async () => {
@@ -71,7 +71,7 @@ const InformationFriend = ({
             [
                 {
                     text: 'Cancel',
-                    onPress: () => { },
+                    onPress: () => {},
                     style: 'cancel',
                 },
                 {

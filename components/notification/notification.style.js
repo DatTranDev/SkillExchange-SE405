@@ -33,7 +33,7 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         width: '70%',
-        marginHorizontal:'auto'
+        marginHorizontal: 'auto',
     },
     TabBox: {
         width: '50%',
@@ -130,18 +130,21 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         maxWidth: '100%',
         marginBottom: 2,
+        flexWrap: 'wrap',
     },
     Name: {
         fontFamily: 'Inter-SemiBold',
         fontSize: 16,
         maxWidth: 140,
         color: '#1A1A1A',
+        flexShrink: 1,
     },
     Content: {
         fontFamily: 'Inter-Regular',
         fontSize: 15,
         color: '#666666',
         lineHeight: 20,
+        flexShrink: 1,
     },
     System: {
         marginTop: 4,
@@ -160,7 +163,7 @@ export const styles = StyleSheet.create({
         height: 90,
     },
     Horizon: {
-        height: '100%',
+        flex: 1,
         backgroundColor: '#FAFAFA',
     },
     Response: {

@@ -1,7 +1,7 @@
 import { View, Text, Image, ImageBackground, TextInput, ScrollView, TouchableOpacity, FlatList, Linking, ActivityIndicator, Alert, KeyboardAvoidingView } from "react-native";
 import React, { useState, useEffect, useRef } from 'react';
 import { loadFonts, styles } from './mainMess.style';
-import { icons, API_CONFIG } from '@constants';
+import { icons, API_CONFIG, buildApiUrl } from '@constants';
 import CardMessage from './card_message';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { useSocketContext } from '../../../context/SocketContext';
@@ -139,7 +139,7 @@ const ScreenMess = () => {
 
 
 	const loadChat = async () => {
-		const url = `https://se405-skillexchangebe.onrender.com/api/v1/chat/find/${user.id}`
+		const url = buildApiUrl(`/chat/find/${user.id}`);
 		const data = await GetData(url);
 		if (data !== "Something went wrong") {
 			if (Array.isArray(data)) {
