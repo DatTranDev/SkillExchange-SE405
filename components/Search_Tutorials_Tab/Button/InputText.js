@@ -1,6 +1,6 @@
 import { scale } from 'react-native-size-matters';
-import { COLORS } from '../../../constants';
-import { Text, View, StyleSheet, TextInput } from 'react-native';
+import { COLORS, icons } from '../../../constants';
+import { Text, View, StyleSheet, TextInput, Image } from 'react-native';
 import { IconOutline } from '@ant-design/icons-react-native';
 import { forwardRef, useState } from 'react';
 const InputText = (
@@ -14,7 +14,7 @@ const InputText = (
         iconName,
         error,
         password,
-        onFocus = () => {},
+        onFocus = () => { },
         ...props
     },
     ref
@@ -43,12 +43,26 @@ const InputText = (
                     },
                 ]}
             >
-                <IconOutline
-                    name={iconName}
-                    size={scale(18)}
-                    color={isFocused ? '#4A90E2' : '#999999'}
-                    style={{ marginRight: 12 }}
-                />
+                {iconName && (
+                    iconName === 'search' ? (
+                        <Image
+                            source={icons.search_icon}
+                            style={{
+                                width: scale(18),
+                                height: scale(18),
+                                marginRight: 12,
+                                tintColor: isFocused ? '#4A90E2' : '#999999'
+                            }}
+                        />
+                    ) : (
+                        <IconOutline
+                            name={iconName}
+                            size={scale(18)}
+                            color={isFocused ? '#4A90E2' : '#999999'}
+                            style={{ marginRight: 12 }}
+                        />
+                    )
+                )}
                 <TextInput
                     secureTextEntry={hidePassword}
                     autoCorrect={false}
