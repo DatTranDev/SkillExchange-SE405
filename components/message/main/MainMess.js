@@ -6,8 +6,6 @@ import CardMessage from './card_message';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { useSocketContext } from '../../../context/SocketContext';
 import { useSession } from '../../../context/AuthContext';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import CheckRefreshToken from '../../../utils/checkrefreshtoken';
 import GetData from '../../../utils/getdata';
 
 const ScreenMess = () => {
@@ -84,31 +82,44 @@ const ScreenMess = () => {
 		}
 	}, [chatRooms, socket, chatAppear])
 
-	// Listen for latest message updates (e.g., after message deletion)
+	// Listen for deleted messages to update latest message
 	useEffect(() => {
-		if (socket == null) return;
+		if (socket === null) return;
 
-		socket.on("updateLatestMessage", (res) => {
-			const { chatID, latestMessage } = res;
+		const handleDeletedMessageInMess = (res) => {
+			const { chatID, messageID } = res;
 
-			// Update latestMessage state
-			const msg = latestMessage.findIndex((message) => message.chatID === chatID);
-			if (msg !== -1) {
-				const newLatestMessage = [...latestMessage];
-				if (latestMessage) {
-					newLatestMessage[msg] = latestMessage;
-				} else {
-					// Remove if no latest message (all messages deleted)
-					newLatestMessage.splice(msg, 1);
-				}
-				setLatestMessage(newLatestMessage);
+			// Find if this deleted message was the latest message
+			const latestMsgIndex = latestMessage.findIndex((msg) => msg.chatID === chatID && msg._id === messageID);
+
+			if (latestMsgIndex !== -1) {
+				// The deleted message was the latest one
+				// Update it to show "Message is deleted"
+				const updatedLatestMessage = latestMessage.map((msg) => {
+					if (msg.chatID === chatID && msg._id === messageID) {
+						return {
+							...msg,
+							content: "Message is deleted",
+							type: "text"
+						};
+					}
+					return msg;
+				});
+				setLatestMessage(updatedLatestMessage);
+			} else {
+				// console.log("⚠️ MainMess: Deleted message was not the latest message");
 			}
-		});
+		};
+
+		// Remove any existing listener first to prevent duplicates
+		socket.off('recieveDeletedMsg', handleDeletedMessageInMess);
+		// Add the new listener
+		socket.on('recieveDeletedMsg', handleDeletedMessageInMess);
 
 		return () => {
-			socket.off("updateLatestMessage");
+			socket.off('recieveDeletedMsg', handleDeletedMessageInMess);
 		};
-	}, [socket, latestMessage]);
+	}, [socket, latestMessage, user.id]);
 
 	const moveItemToTop = (items, targetId) => {
 		// Tìm vị trí của item có item.chatInfo._id trùng với targetId
@@ -166,9 +177,10 @@ const ScreenMess = () => {
 		// }
 	}, [searchText]);
 
+	// Load chat data on initial mount
 	useEffect(() => {
 		loadChat();
-	}, [])
+	}, [isFocused])
 	useEffect(() => {
 		const loadFont = async () => {
 			await loadFonts();

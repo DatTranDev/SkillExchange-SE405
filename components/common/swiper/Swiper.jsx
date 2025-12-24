@@ -19,7 +19,7 @@ const SwiperList = ({
             });
 
             if (data && data !== 'Something went wrong') {
-                console.log('Request created successfully:', data);
+               
             } else {
                 console.error('Failed to create request');
             }

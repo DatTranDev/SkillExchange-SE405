@@ -144,7 +144,6 @@ const ContentScreen = () => {
 
     useEffect(() => {
         if (socket === null) return;
-
         socket.on('recieveDeletedMsg', (res) => {
             if (chatId !== res.chatID) return;
             // Remove the deleted message from the message list
@@ -228,19 +227,6 @@ const ContentScreen = () => {
                     messageID: messageId,
                 });
 
-                // Find the new latest message after deletion
-                const newLatestMessage = updatedMessageList.length > 0
-                    ? updatedMessageList[updatedMessageList.length - 1]
-                    : null;
-
-                // Emit updated latest message to update chat list
-                if (newLatestMessage) {
-                    socket.emit('sendMessage', {
-                        ...newLatestMessage,
-                        recipientID,
-                        chatID: chatId
-                    });
-                }
             }
         } else {
             Alert.alert('Error', 'Something went wrong');

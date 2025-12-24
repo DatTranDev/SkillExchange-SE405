@@ -8,8 +8,7 @@ import { router } from 'expo-router';
 import PostData from '../../utils/postdata';
 import HandleSessionExpired from '../../utils/handlesession';
 import { useSocketContext } from '../../context/SocketContext';
-export const createChat = async (id1, id2) => {
-    const { socket } = useSocketContext();
+export const createChat = async (id1, id2, socket) => {
     const dataPost = {
         firstID: id1,
         secondID: id2,
@@ -37,6 +36,8 @@ export const createChat = async (id1, id2) => {
     }
 };
 const Request = (props) => {
+    const { socket } = useSocketContext();
+
     const loadToken = async () => {
         const token = await AsyncStorage.getItem('refreshToken');
         if (token) {
@@ -102,7 +103,8 @@ const Request = (props) => {
         deleteRequest();
     };
     const handlePressAccept = async () => {
-        if (await createChat(props.SenderId, props.MyId)) await deleteRequest();
+        const check = await createChat(props.SenderId, props.MyId, socket);
+        if (check) await deleteRequest();
     };
     const moment = require('moment');
     const dateTime = moment(props.Time).format('DD/MM/YYYY HH:mm');

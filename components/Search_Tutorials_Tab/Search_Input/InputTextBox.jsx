@@ -61,7 +61,7 @@ const InputTextBox = () => {
             const response = await axios({
                 method: 'get',
                 maxBodyLength: Infinity,
-                url: `${bareUrl}/api/v1/topic/find`,
+                url: `${API_CONFIG.BASE_URL}/api/v1/topic/find`,
                 headers: {},
             });
 
