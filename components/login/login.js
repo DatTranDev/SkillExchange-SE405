@@ -75,13 +75,36 @@ const Login = ({ navigation }) => {
                     password: password,
                 }),
             });
+
+            const json = await response.json();
+
             if (response.status === 401) {
                 alert('Wrong email or password');
             } else if (response.status === 404) {
                 alert('User not found');
+            } else if (response.status === 403) {
+                // Account is banned or deleted
+                if (json.accountStatus === 'banned') {
+                    const banDate = json.bannedAt
+                        ? new Date(json.bannedAt).toLocaleDateString()
+                        : 'N/A';
+                    alert(
+                        `Account Suspended\n\n` +
+                            `Your account has been suspended.\n\n` +
+                            `Reason: ${json.banReason || 'Violation of terms of service'}\n` +
+                            `Date: ${banDate}\n\n` +
+                            `If you believe this is a mistake, please contact support at:\n${json.supportEmail}`
+                    );
+                } else if (json.accountStatus === 'deleted') {
+                    alert(
+                        `Account Deleted\n\n` +
+                            `This account has been deleted and cannot be accessed.\n\n` +
+                            `If you believe this is a mistake, please contact support at:\n${json.supportEmail}`
+                    );
+                } else {
+                    alert(json.message || 'Access denied');
+                }
             } else {
-                const json = await response.json();
-
                 setUsername(json.data.username);
 
                 try {
@@ -167,7 +190,7 @@ const Login = ({ navigation }) => {
                         marginRight: 20,
                         fontFamily: 'AbhayaLibre-Regular',
                         fontSize: scale(10),
-                        marginTop: 4
+                        marginTop: 4,
                     }}
                 >
                     Forgot password ?
