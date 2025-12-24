@@ -14,7 +14,7 @@ import {
     Alert,
 } from 'react-native';
 import { registerRootComponent } from 'expo';
-import { icons, API_CONFIG } from '@constants';
+import { icons, API_CONFIG, buildApiUrl } from '@constants';
 import { loadFonts, styles } from './mainRoom.style';
 import { Message } from './message';
 import * as ImagePicker from 'expo-image-picker';
@@ -195,8 +195,8 @@ const ContentScreen = () => {
             .getMinutes()
             .toString()
             .padStart(2, '0')} ${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1)
-                .toString()
-                .padStart(2, '0')}/${date.getFullYear()}`;
+            .toString()
+            .padStart(2, '0')}/${date.getFullYear()}`;
         return formattedDate;
     };
     const checkTimeDifference = (dateTime1, dateTime2) => {
@@ -209,10 +209,10 @@ const ContentScreen = () => {
         return diffMinutes > 5;
     };
     const handleDeleteMessage = async (messageId) => {
-        const url = `https://se405-skillexchangebe.onrender.com/api/v1/message/delete/${messageId}`;
+        const url = buildApiUrl(`/message/delete/${messageId}`);
         const dataSend = {
             senderID: user.id,
-        }
+        };
         const data = await DeleteData(url, dataSend);
         if (data !== 'Something went wrong') {
             // Remove message from local list
@@ -229,16 +229,17 @@ const ContentScreen = () => {
                 });
 
                 // Find the new latest message after deletion
-                const newLatestMessage = updatedMessageList.length > 0
-                    ? updatedMessageList[updatedMessageList.length - 1]
-                    : null;
+                const newLatestMessage =
+                    updatedMessageList.length > 0
+                        ? updatedMessageList[updatedMessageList.length - 1]
+                        : null;
 
                 // Emit updated latest message to update chat list
                 if (newLatestMessage) {
                     socket.emit('sendMessage', {
                         ...newLatestMessage,
                         recipientID,
-                        chatID: chatId
+                        chatID: chatId,
                     });
                 }
             }
@@ -278,8 +279,20 @@ const ContentScreen = () => {
                 }
 
                 // Determine message position in group
-                const hasPrevSameSender = i > 0 && messageList[i - 1].senderID.id === messageList[i].senderID.id && !checkTimeDifference(new Date(messageList[i - 1].dateTime), new Date(messageList[i].dateTime));
-                const hasNextSameSender = i < messageList.length - 1 && messageList[i].senderID.id === messageList[i + 1].senderID.id && !checkTimeDifference(new Date(messageList[i].dateTime), new Date(messageList[i + 1].dateTime));
+                const hasPrevSameSender =
+                    i > 0 &&
+                    messageList[i - 1].senderID.id === messageList[i].senderID.id &&
+                    !checkTimeDifference(
+                        new Date(messageList[i - 1].dateTime),
+                        new Date(messageList[i].dateTime)
+                    );
+                const hasNextSameSender =
+                    i < messageList.length - 1 &&
+                    messageList[i].senderID.id === messageList[i + 1].senderID.id &&
+                    !checkTimeDifference(
+                        new Date(messageList[i].dateTime),
+                        new Date(messageList[i + 1].dateTime)
+                    );
 
                 if (hasPrevSameSender && hasNextSameSender) {
                     position = 'middle';
@@ -401,7 +414,7 @@ const ContentScreen = () => {
     };
 
     const loadMessage = async () => {
-        const url = `${API_CONFIG.BASE_URL}/api/v1/message/find/${chatId}`;
+        const url = buildApiUrl(`/message/find/${chatId}`);
         const data = await GetData(url);
         if (data !== 'Something went wrong') {
             setMessageList(data);
@@ -451,8 +464,10 @@ const ContentScreen = () => {
         if (response != 404 && response !== 'Something went wrong' && response) {
             // Kiểm tra nếu có lỗi nội dung nhạy cảm (status 400 từ backend)
             if (response.message && !response.data) {
-                if (response.message.includes('inappropriate content') ||
-                    response.message.includes('cannot be sent')) {
+                if (
+                    response.message.includes('inappropriate content') ||
+                    response.message.includes('cannot be sent')
+                ) {
                     const msgList = messageList.filter((value) => value._id != idMsg);
                     setMessageList([...msgList]);
                     Alert.alert(
@@ -711,7 +726,7 @@ const ContentScreen = () => {
                 Alert.alert('Alert', 'Unable to send file');
             }
         } catch (error) {
-            Alert.alert('Alert', 'An error has occurred. Please try again later !');
+            //Alert.alert('Alert', 'An error has occurred. Please try again later !');
         } finally {
             setUploading(false);
         }

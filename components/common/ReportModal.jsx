@@ -13,6 +13,7 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import mime from 'react-native-mime-types';
+import { buildApiUrl } from '@constants';
 import PostData from '../../utils/postdata';
 import CheckRefreshToken from '../../utils/checkrefreshtoken';
 import { icons } from '@constants';
@@ -60,17 +61,14 @@ const ReportModal = ({ visible, onClose, onSubmit, reportType = 'user', senderID
             uri: imageUri,
         });
         try {
-            const response = await fetch(
-                'https://se405-skillexchangebe.onrender.com/api/v1/upload/file',
-                {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        Authorization: `Bearer ${access}`,
-                    },
-                }
-            );
+            const response = await fetch(buildApiUrl('/upload/file'), {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${access}`,
+                },
+            });
             if (response.status == 200) {
                 const json = await response.json();
                 return json.image;
@@ -80,17 +78,14 @@ const ReportModal = ({ visible, onClose, onSubmit, reportType = 'user', senderID
                     const newAccess = await CheckRefreshToken(refreshToken);
                     if (newAccess && newAccess !== 'Session expired') {
                         await AsyncStorage.setItem('accessToken', newAccess);
-                        const response2 = await fetch(
-                            'https://se405-skillexchangebe.onrender.com/api/v1/upload/file',
-                            {
-                                method: 'POST',
-                                body: formData,
-                                headers: {
-                                    'Content-Type': 'multipart/form-data',
-                                    Authorization: `Bearer ${newAccess}`,
-                                },
-                            }
-                        );
+                        const response2 = await fetch(buildApiUrl('/upload/file'), {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'Content-Type': 'multipart/form-data',
+                                Authorization: `Bearer ${newAccess}`,
+                            },
+                        });
                         if (response2.status == 200) {
                             const json = await response2.json();
                             return json.image;
@@ -105,8 +100,6 @@ const ReportModal = ({ visible, onClose, onSubmit, reportType = 'user', senderID
             return false;
         }
     };
-
-
 
     const handleSubmit = async () => {
         if (!reason.trim()) {
@@ -134,10 +127,10 @@ const ReportModal = ({ visible, onClose, onSubmit, reportType = 'user', senderID
                 senderID: senderID,
                 targetID: targetID,
                 content: reason,
-                evidence: imageUrl || ''
+                evidence: imageUrl || '',
             };
 
-            const url = 'https://se405-skillexchangebe.onrender.com/api/v1/report/add';
+            const url = buildApiUrl('/report/add');
             const response = await PostData(url, reportData);
 
             if (response && response !== 'Something went wrong' && response !== '404') {
@@ -165,7 +158,12 @@ const ReportModal = ({ visible, onClose, onSubmit, reportType = 'user', senderID
     };
 
     return (
-        <Modal visible={visible} transparent={true} animationType="fade" onRequestClose={handleClose}>
+        <Modal
+            visible={visible}
+            transparent={true}
+            animationType="fade"
+            onRequestClose={handleClose}
+        >
             <TouchableOpacity
                 style={{
                     flex: 1,
@@ -214,7 +212,9 @@ const ReportModal = ({ visible, onClose, onSubmit, reportType = 'user', senderID
                                 Report {reportType === 'user' ? 'User' : 'Content'}
                             </Text>
                             <TouchableOpacity onPress={handleClose}>
-                                <Text style={{ fontSize: 32, color: '#666666', lineHeight: 32 }}>×</Text>
+                                <Text style={{ fontSize: 32, color: '#666666', lineHeight: 32 }}>
+                                    ×
+                                </Text>
                             </TouchableOpacity>
                         </View>
 
@@ -295,7 +295,11 @@ const ReportModal = ({ visible, onClose, onSubmit, reportType = 'user', senderID
                                     >
                                         <Image
                                             source={{ uri: image }}
-                                            style={{ width: '100%', height: '100%', resizeMode: 'cover' }}
+                                            style={{
+                                                width: '100%',
+                                                height: '100%',
+                                                resizeMode: 'cover',
+                                            }}
                                         />
                                         <TouchableOpacity
                                             onPress={handleRemoveImage}

@@ -3,12 +3,37 @@ import { COLORS } from '../../../constants';
 import { Text, View, StyleSheet, TextInput } from 'react-native';
 import { IconOutline } from '@ant-design/icons-react-native';
 import { forwardRef, useState } from 'react';
-const InputText = ({ label, iconName, error, password, onFocus = () => {}, ...props }, ref) => {
+const InputText = (
+    {
+        marginHorizontal = 10,
+        marginVertical = 5,
+        paddingHorizontal = 10,
+        label,
+        height = 50,
+        labelHeight,
+        iconName,
+        error,
+        password,
+        onFocus = () => {},
+        ...props
+    },
+    ref
+) => {
     const [isFocused, setIsFocused] = useState(false);
     const [hidePassword, setHidePassword] = useState(password);
     return (
-        <View style={{ marginVertical: 5, marginHorizontal: 10, paddingHorizontal: 10 }}>
-            {label && <Text style={styles.label}>{label}</Text>}
+        <View
+            style={{
+                marginVertical: marginVertical,
+                marginHorizontal: marginHorizontal,
+                paddingHorizontal: paddingHorizontal,
+            }}
+        >
+            {label && (
+                <Text style={[styles.label, labelHeight && { height: scale(labelHeight) }]}>
+                    {label}
+                </Text>
+            )}
             <View
                 style={[
                     styles.inputContainer,
@@ -19,7 +44,7 @@ const InputText = ({ label, iconName, error, password, onFocus = () => {}, ...pr
                 ]}
             >
                 <IconOutline
-                    name="search"
+                    name={iconName}
                     size={scale(18)}
                     color={isFocused ? '#4A90E2' : '#999999'}
                     style={{ marginRight: 12 }}

@@ -61,11 +61,11 @@ const InputTextBox = () => {
             const response = await axios({
                 method: 'get',
                 maxBodyLength: Infinity,
-                url: `${bareUrl}/api/v1/topic/find`,
+                url: `${API_CONFIG.BASE_URL}/api/v1/topic/find`,
                 headers: {},
             });
 
-            if (response.status === 200) {
+            if (response.status === 200 || response.status === 304) {
                 setTopicData(response.data.data);
             }
         } catch (error) {
@@ -83,7 +83,7 @@ const InputTextBox = () => {
                 headers: {},
             });
 
-            if (response.status === 200) {
+            if (response.status === 200 || response.status === 304) {
                 const data = response.data.data;
                 const isQueryInData = data.some((topic) => topic.name === query);
                 if (isQueryInData) {
@@ -122,6 +122,11 @@ const InputTextBox = () => {
                     style={{ zIndex: 3 }}
                     placeholder="Enter topic to search"
                     label=""
+                    marginHorizontal={5}
+                    marginVertical={5}
+                    paddingHorizontal={10}
+                    labelHeight={10}
+                    iconName="search"
                     onChangeText={handleOnChangeText}
                     onFocus={handleonFocus}
                     onBlur={handleOnBlur}
